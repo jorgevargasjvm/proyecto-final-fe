@@ -1,21 +1,7 @@
 import React from 'react'
-import {FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube} from 'react-icons/fa'
-import {
-    FooterContainer,
-    FooterLink,
-    FooterLinkItems,
-    FooterLinksContainer,
-    FooterLinksWrapper,
-    FooterLinkTitle,
-    FooterWrrap,
-    SocialIconLink,
-    SocialIcons,
-    SocialLogo,
-    SocialMedia,
-    SocialMediaWrap,
-    WebsiteRights
-} from './FooterElements'
-import {animateScroll as scroll} from 'react-scroll'
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa'
+import { FooterContainer, FooterLink, FooterLinkItems, FooterLinkTitle, FooterLinksContainer, FooterLinksWrapper, FooterWrrap, SocialIconLink, SocialIcons, SocialLogo, SocialMedia, SocialMediaWrap, WebsiteRights } from './FooterElements'
+import { animateScroll as scroll } from 'react-scroll'
 
 const Footer = () => {
 
@@ -30,45 +16,45 @@ const Footer = () => {
                 <FooterLinksContainer>
                     <FooterLinksWrapper>
                         <FooterLinkItems>
-                            <FooterLinkTitle>About us</FooterLinkTitle>
-                            <FooterLink to='/signin'>How it works</FooterLink>
-                            <FooterLink to='/signin'>Testimonials</FooterLink>
-                            <FooterLink to='/signin'>Careers</FooterLink>
-                            <FooterLink to='/signin'>Investors</FooterLink>
-                            <FooterLink to='/signin'>Terms of Services</FooterLink>
+                            <FooterLinkTitle>Text</FooterLinkTitle>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
                         </FooterLinkItems>
                         <FooterLinkItems>
-                            <FooterLinkTitle>About us</FooterLinkTitle>
-                            <FooterLink to='/signin'>How it works</FooterLink>
-                            <FooterLink to='/signin'>Testimonials</FooterLink>
-                            <FooterLink to='/signin'>Careers</FooterLink>
-                            <FooterLink to='/signin'>Investors</FooterLink>
-                            <FooterLink to='/signin'>Terms of Services</FooterLink>
+                            <FooterLinkTitle>Text</FooterLinkTitle>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
                         </FooterLinkItems>
                     </FooterLinksWrapper>
                     <FooterLinksWrapper>
                         <FooterLinkItems>
-                            <FooterLinkTitle>About us</FooterLinkTitle>
-                            <FooterLink to='/signin'>How it works</FooterLink>
-                            <FooterLink to='/signin'>Testimonials</FooterLink>
-                            <FooterLink to='/signin'>Careers</FooterLink>
-                            <FooterLink to='/signin'>Investors</FooterLink>
-                            <FooterLink to='/signin'>Terms of Services</FooterLink>
+                            <FooterLinkTitle>Text</FooterLinkTitle>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
                         </FooterLinkItems>
                         <FooterLinkItems>
-                            <FooterLinkTitle>About us</FooterLinkTitle>
-                            <FooterLink to='/signin'>How it works</FooterLink>
-                            <FooterLink to='/signin'>Testimonials</FooterLink>
-                            <FooterLink to='/signin'>Careers</FooterLink>
-                            <FooterLink to='/signin'>Investors</FooterLink>
-                            <FooterLink to='/signin'>Terms of Services</FooterLink>
+                            <FooterLinkTitle>Text</FooterLinkTitle>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
+                            <FooterLink to='/signin'>Text</FooterLink>
                         </FooterLinkItems>
                     </FooterLinksWrapper>
                 </FooterLinksContainer>
                 <SocialMedia>
                     <SocialMediaWrap>
-                        <SocialLogo to='/' onClick={toggleHome}>moniskhan45</SocialLogo>
-                        <WebsiteRights>moniskhan45 ©{new Date().getFullYear()} All rights reserved.</WebsiteRights>
+                        <SocialLogo to='/' onClick={toggleHome}>text</SocialLogo>
+                        <WebsiteRights>Text ©{new Date().getFullYear()} All rights reserved.</WebsiteRights>
                         <SocialIcons>
                             <SocialIconLink href='/' target="_blank" aria-label="Facebook">
                                 <FaFacebook />

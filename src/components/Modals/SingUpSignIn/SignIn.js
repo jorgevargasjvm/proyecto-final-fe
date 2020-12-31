@@ -5,12 +5,13 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 export default function SignInForm(props) {
     return (
         <form ref={props?.wrapperRef}>
-            <h2>Welcome Back!</h2>
+            <h2>Bienvenido!</h2>
             <fieldset>
-                <legend>Log In</legend>
+                <legend>Iniciar sesión
+                </legend>
                 <ul>
                     <li>
-                        <label htmlFor="email">Email:</label>
+                        <label htmlFor="email">Correo electrónico:</label>
                         <input
                             type="email"
                             name="email"
@@ -19,7 +20,7 @@ export default function SignInForm(props) {
                             id="email"/>
                     </li>
                     <li>
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">Contraseña:</label>
                         <input
                             type="password"
                             name="password"
@@ -29,8 +30,9 @@ export default function SignInForm(props) {
                     </li>
                 </ul>
             </fieldset>
-            <button onClick={(event)=>props?.handleLogin(event)}>{props?.loginButtonLoading ? <CircularProgress/> : "Login"}</button>
-            <button type="button" onClick={() => props?.changeView("signUp")}>Create an Account</button>
+            <button onClick={(event)=>props?.handleLogin(event)}>{props?.loginButtonLoading ? <CircularProgress/> : "Iniciar sesión"}</button>
+            <button type="button" onClick={() => props?.changeView("signUp")}>
+                Crea una cuenta</button>
         </form>
     )
 }

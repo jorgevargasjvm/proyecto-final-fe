@@ -19,22 +19,22 @@ const Navbar = ({toggle, toggleHome, loggedUser, handleSignOut, logoutBtnLoading
     return (
         <Nav>
             <NavbarContainer>
-                <NavLogo to='/' onClick={toggleHome}>moniskhan45</NavLogo>
+                <NavLogo to='/' onClick={toggleHome}>Proyecto</NavLogo>
                 <MobileIcon onClick={toggle}>
                     <FaBars/>
                 </MobileIcon>
                 <NavMenu>
                     <NavItem>
-                        <NavLinks to='about'>Instruction</NavLinks>
+                        <NavLinks to='pre-boda'>PRE-BODA</NavLinks>
                     </NavItem>
                     <NavItem>
-                        <NavLinks to='discover'>Process image</NavLinks>
+                        <NavLinks to='boda'>BODA</NavLinks>
                     </NavItem>
                     <NavItem>
-                        <NavLinks to='translate'>Translate</NavLinks>
+                        <NavLinks to='cumpeano'>CUMPLEANO</NavLinks>
                     </NavItem>
                     <NavItem>
-                        <NavLinks to='services'>Recent projects</NavLinks>
+                        <NavLinks to='video-de-evento'>VIDEO DE EVENTO</NavLinks>
                     </NavItem>
                 </NavMenu>
 
@@ -44,10 +44,10 @@ const Navbar = ({toggle, toggleHome, loggedUser, handleSignOut, logoutBtnLoading
                     </NavBtn> :
                     <FlexRow>
                         <NavBtn>
-                            <NavBtnLink to="#" onClick={handleSignInBtn}>Sign In</NavBtnLink>
+                            <NavBtnLink to="#" onClick={handleSignInBtn}>Iniciar seasion</NavBtnLink>
                         </NavBtn>
                         <NavBtn>
-                            <NavBtnLink to="#" onClick={handleSignUpBtn}>Sign Up</NavBtnLink>
+                            <NavBtnLink to="#" onClick={handleSignUpBtn}>Crear cuenta</NavBtnLink>
                         </NavBtn>
                     </FlexRow>
                 }
