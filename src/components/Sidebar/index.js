@@ -11,6 +11,7 @@ import {
 } from './SidebarElements';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {FlexCol} from "../Flex";
+import {NavLinks} from "../Navbar/NavbarElements";
 
 const Sidebar = ({isOpen, toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn}) => {
     return (
@@ -20,30 +21,30 @@ const Sidebar = ({isOpen, toggle, loggedUser, handleSignOut, logoutBtnLoading, h
             </Icon>
             <SidebarWrapper>
                 <SidebarMenu>
-                    <SidebarLink to="about" onClick={toggle}>
-                        Instruction
+                    <SidebarLink to="pre-boda" onClick={toggle}>
+                        PRE-BODA
                     </SidebarLink>
-                    <SidebarLink to="discover" onClick={toggle}>
-                        Process image
+                    <SidebarLink to="boda" onClick={toggle}>
+                        BODA
                     </SidebarLink>
-                    <SidebarLink to="translate" onClick={toggle}>
-                        Translate
+                    <SidebarLink to="cumpleanos" onClick={toggle}>
+                        CUMPLEANOS
                     </SidebarLink>
-                    <SidebarLink to="services" onClick={toggle}>
-                        Recent projects
+                    <SidebarLink to="vide-de-evento" onClick={toggle}>
+                        VIDEO DE EVENTO
                     </SidebarLink>
                 </SidebarMenu>
                 {loggedUser ?
                     <SideBtnWrap>
                         <SidebarRoute to='#' onClick={handleSignOut}>{logoutBtnLoading ?
-                            <CircularProgress/> : `Sign out ${loggedUser?.name + ' ' + loggedUser?.surname}`}</SidebarRoute>
+                            <CircularProgress/> : `Desconectar ${loggedUser?.name + ' ' + loggedUser?.surname}`}</SidebarRoute>
                     </SideBtnWrap> :
                     <FlexCol>
                         <SideBtnWrap>
-                            <SidebarRoute to="#" onClick={handleSignInBtn}>Sign In</SidebarRoute>
+                            <SidebarRoute to="#" onClick={handleSignInBtn}>Inicie sesión</SidebarRoute>
                         </SideBtnWrap>
                         <SideBtnWrap>
-                            <SidebarRoute to="#" onClick={handleSignUpBtn}>Sign Up</SidebarRoute>
+                            <SidebarRoute to="#" onClick={handleSignUpBtn}>Regístrese</SidebarRoute>
                         </SideBtnWrap>
                     </FlexCol>}
             </SidebarWrapper>

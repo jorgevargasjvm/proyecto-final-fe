@@ -5,12 +5,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 export default function SignUpForm(props) {
     return (
         <form ref={props?.wrapperRef}>
-            <h2>Sign Up!</h2>
+            <h2>Regístrate!</h2>
             <fieldset>
-                <legend>Create Account</legend>
+                <legend>Regístrate</legend>
                 <ul>
                     <li>
-                        <label htmlFor="name">Name:</label>
+                        <label htmlFor="name">Nombre:</label>
                         <input
                             type="text"
                             name="name"
@@ -19,16 +19,7 @@ export default function SignUpForm(props) {
                             onChange={(event) => props?.onSignInLoginInputChange(event)}/>
                     </li>
                     <li>
-                        <label htmlFor="surname">Surname:</label>
-                        <input
-                            type="text"
-                            name='surname'
-                            id="surname"
-                            value={props?.user?.surname}
-                            onChange={(event) => props?.onSignInLoginInputChange(event)}/>
-                    </li>
-                    <li>
-                        <label htmlFor="email">Email:</label>
+                        <label htmlFor="email">Correo electrónico:</label>
                         <input
                             type="email"
                             name="email"
@@ -37,7 +28,7 @@ export default function SignUpForm(props) {
                             onChange={(event) => props?.onSignInLoginInputChange(event)}/>
                     </li>
                     <li>
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">Contraseña:</label>
                         <input
                             type="password"
                             name="password"
@@ -46,7 +37,7 @@ export default function SignUpForm(props) {
                             onChange={(event) => props?.onSignInLoginInputChange(event)}/>
                     </li>
                     <li>
-                        <label htmlFor="rePassword">Repeat password:</label>
+                        <label htmlFor="rePassword">Repetir contraseña:</label>
                         <input
                             type="password"
                             name="rePassword"
@@ -56,8 +47,8 @@ export default function SignUpForm(props) {
                     </li>
                 </ul>
             </fieldset>
-            <button onClick={(event)=>props?.handleRegistration(event)}>{props?.registrationButtonLoading ? <CircularProgress/> : "Submit"}</button>
-            <button type="button" onClick={() => props?.changeView("logIn")}>Have an Account?</button>
+            <button onClick={(event)=>props?.handleRegistration(event)}>{props?.registrationButtonLoading ? <CircularProgress/> : "Enviar"}</button>
+            <button type="button" onClick={() => props?.changeView("logIn")}>Tienes una cuenta?</button>
         </form>
     )
 }
