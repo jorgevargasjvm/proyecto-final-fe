@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {FlexRow} from "../../components/Flex";
 import { Glyphicon } from 'react-bootstrap';
-export default function PurcgasePage() {
+export default function PurchasePage() {
     return(
             <div>
 

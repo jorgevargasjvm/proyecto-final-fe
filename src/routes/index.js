@@ -2,8 +2,9 @@ import React from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import Layout from "../components/Admin/Layout";
 import {useUserState} from "../context/UserContext";
-import {ADMIN, ROOT, STATISTICS} from "./paths";
+import {ADMIN, PURCHASE, ROOT, STATISTICS} from "./paths";
 import HomePage from "../pages/Home";
+import PurchasePage from "../pages/Purchase";
 
 export default function Router() {
     const {isAuthenticated, user, isAdmin} = useUserState();
@@ -11,6 +12,7 @@ export default function Router() {
         <BrowserRouter>
             <Switch>
                 <Route exact path={ADMIN} render={() => <Redirect to={STATISTICS}/>}/>
+                <PublicRoute exact path={PURCHASE} component={PurchasePage} />
                 <PrivateRoute path={ADMIN} component={Layout}/>
                 <PublicRoute path={ROOT} component={HomePage}/>
                 <Route component={Error}/>
