@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {SnackbarProvider} from 'notistack';
+import {LayoutProvider} from "./context/LayoutContext";
+import {UserProvider} from "./context/UserContext";
 
 ReactDOM.render(
     <React.StrictMode>
         <SnackbarProvider maxSnack={3}>
-            <App/>
+            <LayoutProvider>
+                <UserProvider>
+                    <App/>
+                </UserProvider>
+            </LayoutProvider>
         </SnackbarProvider>
     </React.StrictMode>,
     document.getElementById('root')
