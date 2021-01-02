@@ -11,9 +11,8 @@ import {
 } from './SidebarElements';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {FlexCol} from "../Flex";
-import {NavLinks} from "../Navbar/NavbarElements";
 
-const Sidebar = ({isOpen, toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn}) => {
+const Sidebar = ({isOpen, toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn, isAdmin}) => {
     return (
         <SidebarContainer isOpen={isOpen} onClick={toggle}>
             <Icon onClick={toggle}>
@@ -33,11 +32,14 @@ const Sidebar = ({isOpen, toggle, loggedUser, handleSignOut, logoutBtnLoading, h
                     <SidebarLink to="vide-de-evento" onClick={toggle}>
                         VIDEO DE EVENTO
                     </SidebarLink>
+                    {isAdmin ? <SidebarLink to="/admin" onClick={toggle}>
+                        ADMIN PANEL
+                    </SidebarLink> : <></>}
                 </SidebarMenu>
                 {loggedUser ?
                     <SideBtnWrap>
                         <SidebarRoute to='#' onClick={handleSignOut}>{logoutBtnLoading ?
-                            <CircularProgress/> : `Desconectar ${loggedUser?.name + ' ' + loggedUser?.surname}`}</SidebarRoute>
+                            <CircularProgress/> : `Desconectar ${loggedUser?.name}`}</SidebarRoute>
                     </SideBtnWrap> :
                     <FlexCol>
                         <SideBtnWrap>

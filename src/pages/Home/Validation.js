@@ -1,8 +1,8 @@
 export function registrationFormValidation(user){
     if(user?.name.trim() === "" || user?.name === null)
         return "Name cannot be empty.";
-    if(user?.surname.trim() === "" || user?.surname === null)
-        return "Surname cannot be empty.";
+    /*if(user?.surname.trim() === "" || user?.surname === null)
+        return "Surname cannot be empty.";*/
     if(user?.email.trim() === "" || user?.email === null)
         return "Email cannot be empty.";
     if(!RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(user?.email))

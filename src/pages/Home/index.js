@@ -1,26 +1,24 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import AnimatedBackground from "../../components/AnimatedBackground";
 import Footer from "../../components/Footer";
 import Modal from "../../components/Modals/SingUpSignIn";
 import {useSnackbar} from "notistack";
-import {useCookies} from 'react-cookie';
 import {loginFormValidation, registrationFormValidation} from "./Validation";
 import {animateScroll as scroll} from "react-scroll";
 import InfoSection from "../../components/InfoSection";
 import {homeObjFour, homeObjOne, homeObjThree, homeObjTwo} from '../Data'
+import {loginUser, registration, signOut} from "../../service/API";
+import {useUserDispatch, useUserState} from "../../context/UserContext";
 
-export default function HomePage() {
-    const [loggedUser, setLoggedUser] = useState(null)
-    const [cookies, setCookie, removeCookie] = useCookies(['logged_user']);
-    useEffect(() => {
-        if (cookies['logged_user']) {
-            setLoggedUser(cookies['logged_user']);
-        }
-    }, [cookies]);
-
+export default function HomePage(props) {
+    let {loggedUser, isAdmin} = useUserState();
+    if(loggedUser)
+        loggedUser = JSON.parse(loggedUser);
+    const userDispatch = useUserDispatch();
     const [isOpen, setIsOpen] = useState(false);
+    const [error, setError] = useState(null);
     const [registrationButtonLoading, setRegistrationButtonLoading] = useState(false);
     const [loginButtonLoading, setLoginButtonLoading] = useState(false);
     const [logoutBtnLoading, setLogoutBtnLoading] = useState(false);
@@ -70,7 +68,7 @@ export default function HomePage() {
                 },
             })
         } else {
-            //registrationFunctions(user, setUser, setRegistrationButtonLoading, enqueueSnackbar, handleCloseModal);
+            registration(userDispatch, user, props.history, setRegistrationButtonLoading, setError);
         }
     }
     const handleLogin = (event) => {
@@ -85,23 +83,39 @@ export default function HomePage() {
                 },
             })
         } else {
-            //loginFunctions(user, setUser, setLoginButtonLoading, setLoggedUser, enqueueSnackbar, handleCloseModal, setCookie);
+            loginUser(
+                userDispatch,
+                user.email,
+                user.password,
+                props.history,
+                setLoginButtonLoading,
+                setError,
+            )
         }
     }
 
     const handleSignOut = () => {
-        //logoutFunction(setLogoutBtnLoading, setLoggedUser, enqueueSnackbar, removeCookie);
+        signOut(userDispatch, props?.history);
     }
 
-    const handleSignInBtn = () =>{
+    const handleSignInBtn = () => {
         changeView("logIn");
         setShowModal(true);
     }
 
-    const handleSignUpBtn = () =>{
+    const handleSignUpBtn = () => {
         changeView("signUp");
         setShowModal(true);
     }
+
+    if(error)
+        enqueueSnackbar(error, {
+            variant: 'error',
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'left',
+            },
+        })
 
     return (
         <div>
@@ -112,6 +126,7 @@ export default function HomePage() {
                 handleSignOut={handleSignOut}
                 logoutBtnLoading={logoutBtnLoading}
                 loggedUser={loggedUser}
+                isAdmin={isAdmin}
                 toggle={toggle}/>
             <Navbar
                 toggle={toggle}
@@ -120,6 +135,7 @@ export default function HomePage() {
                 handleSignOut={handleSignOut}
                 handleSignInBtn={handleSignInBtn}
                 handleSignUpBtn={handleSignUpBtn}
+                isAdmin={isAdmin}
                 logoutBtnLoading={logoutBtnLoading}
             />
             <AnimatedBackground/>

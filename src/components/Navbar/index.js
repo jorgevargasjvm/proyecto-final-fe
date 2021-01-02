@@ -3,6 +3,7 @@ import {FaBars} from 'react-icons/fa'
 import {
     MobileIcon,
     Nav,
+    NavAdminLink,
     NavbarContainer,
     NavBtn,
     NavBtnLink,
@@ -42,11 +43,15 @@ const Navbar = ({toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSign
                     <NavItem>
                         <NavLinks to='video-de-evento'>VIDEO DE EVENTO</NavLinks>
                     </NavItem>
+                    {isAdmin ? <NavItem to="/admin">
+                        <NavAdminLink to='/admin'>ADMIN PANEL</NavAdminLink>
+                    </NavItem> : <></>}
                 </NavMenu>
 
                 {loggedUser ?
                     <NavBtn>
-                        <NavBtnLink to="#" onClick={handleSignOut}>{logoutBtnLoading? <CircularProgress/> : `Sign out ${loggedUser?.name + ' ' + loggedUser?.surname}`}</NavBtnLink>
+                        <NavBtnLink to="#" onClick={handleSignOut}>{logoutBtnLoading ?
+                            <CircularProgress/> : `Sign out ${loggedUser?.name}`}</NavBtnLink>
                     </NavBtn> :
                     <FlexRow>
                         <NavBtn>
