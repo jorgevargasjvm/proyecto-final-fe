@@ -16,13 +16,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {FlexRow} from "../Flex";
 import { animateScroll as scroll } from 'react-scroll'
 
-const Navbar = ({toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn}) => {
+const Navbar = ({toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn, isAdmin}) => {
 
-    const toggleHome = () => {
+  const toggleHome = () => {
         scroll.scrollToTop()
     };
-
-
+  
     return (
         <Nav>
             <NavbarContainer>
