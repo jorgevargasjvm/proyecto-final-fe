@@ -7,6 +7,8 @@ import Modal from "../../components/Modals/SingUpSignIn";
 import {useSnackbar} from "notistack";
 import {loginFormValidation, registrationFormValidation} from "./Validation";
 import {animateScroll as scroll} from "react-scroll";
+import InfoSection from "../../components/InfoSection";
+import {homeObjFour, homeObjOne, homeObjThree, homeObjTwo} from '../Data'
 import {loginUser, registration, signOut} from "../../service/API";
 import {useUserDispatch, useUserState} from "../../context/UserContext";
 
@@ -137,6 +139,10 @@ export default function HomePage(props) {
                 logoutBtnLoading={logoutBtnLoading}
             />
             <AnimatedBackground/>
+            <InfoSection {...homeObjOne} />
+            <InfoSection {...homeObjTwo} />
+            <InfoSection {...homeObjThree} />
+            <InfoSection {...homeObjFour} />
             <Footer/>
             <Modal
                 showModal={showModal}
