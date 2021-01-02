@@ -18,36 +18,24 @@ const Footer = () => {
                         <FooterLinkItems>
                             <FooterLinkTitle>Text</FooterLinkTitle>
                             <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
+
                         </FooterLinkItems>
                         <FooterLinkItems>
                             <FooterLinkTitle>Text</FooterLinkTitle>
                             <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
+
                         </FooterLinkItems>
                     </FooterLinksWrapper>
                     <FooterLinksWrapper>
                         <FooterLinkItems>
                             <FooterLinkTitle>Text</FooterLinkTitle>
                             <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
+
                         </FooterLinkItems>
                         <FooterLinkItems>
                             <FooterLinkTitle>Text</FooterLinkTitle>
                             <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
-                            <FooterLink to='/signin'>Text</FooterLink>
+
                         </FooterLinkItems>
                     </FooterLinksWrapper>
                 </FooterLinksContainer>

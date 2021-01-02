@@ -8,6 +8,8 @@ import {useSnackbar} from "notistack";
 import {useCookies} from 'react-cookie';
 import {loginFormValidation, registrationFormValidation} from "./Validation";
 import {animateScroll as scroll} from "react-scroll";
+import InfoSection from "../../components/InfoSection";
+import {homeObjFour, homeObjOne, homeObjThree, homeObjTwo} from '../Data'
 
 export default function HomePage() {
     const [loggedUser, setLoggedUser] = useState(null)
@@ -121,6 +123,10 @@ export default function HomePage() {
                 logoutBtnLoading={logoutBtnLoading}
             />
             <AnimatedBackground/>
+            <InfoSection {...homeObjOne} />
+            <InfoSection {...homeObjTwo} />
+            <InfoSection {...homeObjThree} />
+            <InfoSection {...homeObjFour} />
             <Footer/>
             <Modal
                 showModal={showModal}
