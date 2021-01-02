@@ -3,6 +3,7 @@ import {FaBars} from 'react-icons/fa'
 import {
     MobileIcon,
     Nav,
+    NavAdminLink,
     NavbarContainer,
     NavBtn,
     NavBtnLink,
@@ -14,8 +15,7 @@ import {
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {FlexRow} from "../Flex";
 
-const Navbar = ({toggle, toggleHome, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn}) => {
-
+const Navbar = ({toggle, toggleHome, loggedUser, handleSignOut, logoutBtnLoading, handleSignInBtn, handleSignUpBtn, isAdmin}) => {
     return (
         <Nav>
             <NavbarContainer>
@@ -36,11 +36,15 @@ const Navbar = ({toggle, toggleHome, loggedUser, handleSignOut, logoutBtnLoading
                     <NavItem>
                         <NavLinks to='video-de-evento'>VIDEO DE EVENTO</NavLinks>
                     </NavItem>
+                    {isAdmin ? <NavItem to="/admin">
+                        <NavAdminLink to='/admin'>ADMIN PANEL</NavAdminLink>
+                    </NavItem> : <></>}
                 </NavMenu>
 
                 {loggedUser ?
                     <NavBtn>
-                        <NavBtnLink to="#" onClick={handleSignOut}>{logoutBtnLoading? <CircularProgress/> : `Sign out ${loggedUser?.name + ' ' + loggedUser?.surname}`}</NavBtnLink>
+                        <NavBtnLink to="#" onClick={handleSignOut}>{logoutBtnLoading ?
+                            <CircularProgress/> : `Sign out ${loggedUser?.name}`}</NavBtnLink>
                     </NavBtn> :
                     <FlexRow>
                         <NavBtn>
