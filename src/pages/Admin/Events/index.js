@@ -2,7 +2,7 @@ import React from "react";
 import PageTitle from "../../../components/PageTitle";
 import {columns} from "./table/columns";
 import {Grid} from "@material-ui/core";
-import {addEvent, deleteEvent, editEvent, getAllEvents} from "../../../service/API";
+import { deleteEvent, getAllEvents} from "../../../service/API";
 import {parseError} from "../../../utils/Parser";
 import {useSnackbar} from "notistack";
 import OnlyDeleteTable from "../../../components/Tables/OnlyDeleteTable";
@@ -38,47 +38,6 @@ export default function EventsPage() {
     }, [])
 
     const cols = columns();
-
-    const handleAddEvent = (newData, resolve, reject) => {
-        addEvent(newData).then(response => {
-            const newList = eventList;
-            newList.push(response?.data);
-            setEventList(newList);
-            if (resolve)
-                resolve();
-        }).catch(error => {
-            let err = parseError(error);
-            enqueueSnackbar(err, {
-                variant: 'error',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'left',
-                },
-            });
-            reject();
-        });
-    };
-
-    const handleEditEvent = (newData, oldData, resolve, reject) => {
-        editEvent(newData).then(response => {
-            const dataUpdate = [...eventList];
-            const index = oldData.tableData.id;
-            dataUpdate[index] = newData;
-            setEventList([...dataUpdate]);
-            if (resolve)
-                resolve();
-        }).catch(error => {
-            let err = parseError(error);
-            enqueueSnackbar(err, {
-                variant: 'error',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'left',
-                },
-            });
-            reject();
-        });
-    };
 
     const handleRemoveEvent = (oldData, resolve, reject) => {
         deleteEvent(oldData?.id).then(response => {
