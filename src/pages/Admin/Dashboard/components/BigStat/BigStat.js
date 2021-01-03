@@ -1,9 +1,7 @@
 import React, {useState} from "react";
-import {Grid, Input, MenuItem, Select} from "@material-ui/core";
-import {ArrowForward as ArrowForwardIcon} from "@material-ui/icons";
+import { Input, MenuItem, Select} from "@material-ui/core";
 import {useTheme} from "@material-ui/styles";
 import {Bar, BarChart} from "recharts";
-import classnames from "classnames";
 
 // styles
 import useStyles from "./styles";
@@ -13,12 +11,12 @@ import Widget from "../../../../../components/Admin/Widget";
 import {Typography} from "../../../../../components/Admin/Wrappers";
 
 export default function BigStat(props) {
-    var { product, total, color, registrations, bounce } = props;
-    var classes = useStyles();
-    var theme = useTheme();
+    let { product, total, color } = props;
+    let classes = useStyles();
+    let theme = useTheme();
 
     // local
-    var [value, setValue] = useState("daily");
+    let [value, setValue] = useState("daily");
 
     return (
         <Widget
@@ -37,9 +35,9 @@ export default function BigStat(props) {
                         }
                         className={classes.select}
                     >
-                        <MenuItem value="daily">Daily</MenuItem>
-                        <MenuItem value="weekly">Weekly</MenuItem>
-                        <MenuItem value="monthly">Monthly</MenuItem>
+                        <MenuItem value="daily">Diario</MenuItem>
+                        <MenuItem value="weekly">Semanal</MenuItem>
+                        <MenuItem value="monthly">Mensual</MenuItem>
                     </Select>
                 </div>
             }
@@ -64,49 +62,6 @@ export default function BigStat(props) {
                         barSize={10}
                     />
                 </BarChart>
-            </div>
-            <div className={classes.bottomStatsContainer}>
-                <div className={classnames(classes.statCell, classes.borderRight)}>
-                    <Grid container alignItems="center">
-                        <Typography variant="h6">{registrations[value].value}</Typography>
-                        <ArrowForwardIcon
-                            className={classnames(classes.profitArrow, {
-                                [!registrations[value].profit]: classes.profitArrowDanger,
-                            })}
-                        />
-                    </Grid>
-                    <Typography size="sm" color="text" colorBrightness="secondary">
-                        Registrations
-                    </Typography>
-                </div>
-                <div className={classes.statCell}>
-                    <Grid container alignItems="center">
-                        <Typography variant="h6">{bounce[value].value}%</Typography>
-                        <ArrowForwardIcon
-                            className={classnames(classes.profitArrow, {
-                                [!registrations[value].profit]: classes.profitArrowDanger,
-                            })}
-                        />
-                    </Grid>
-                    <Typography size="sm" color="text" colorBrightness="secondary">
-                        Bounce Rate
-                    </Typography>
-                </div>
-                <div className={classnames(classes.statCell, classes.borderRight)}>
-                    <Grid container alignItems="center">
-                        <Typography variant="h6">
-                            {registrations[value].value * 10}
-                        </Typography>
-                        <ArrowForwardIcon
-                            className={classnames(classes.profitArrow, {
-                                [classes.profitArrowDanger]: !registrations[value].profit,
-                            })}
-                        />
-                    </Grid>
-                    <Typography size="sm" color="text" colorBrightness="secondary">
-                        Views
-                    </Typography>
-                </div>
             </div>
         </Widget>
     );
