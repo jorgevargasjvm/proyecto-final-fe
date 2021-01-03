@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Grid, LinearProgress} from "@material-ui/core";
 import {useTheme} from "@material-ui/styles";
 import {Line, LineChart,} from "recharts";
@@ -13,6 +13,8 @@ import PageTitle from "../../../components/PageTitle";
 import {Typography} from "../../../components/Admin/Wrappers";
 import {LargeDot} from "../../../components/Dot";
 import BigStat from "./components/BigStat/BigStat";
+import AllProducts from "./components/AllProducts";
+import {numberOfSales} from "../../../service/Statistics";
 
 const TABS = {
     today: 0,
@@ -23,8 +25,20 @@ const TABS = {
 
 export default function DashboardPage(props) {
     const [selectedTab, setSelectedTab] = useState(TABS.today);
+    const [todayEvents, setTodayEvents] = useState();
+    const [allSales, setAllSales] = useState(null);
+    const [pastWeekEvents, setPastWeekEvents] = useState();
+    const [pastMonthEvents, setPastMonthEvents] = useState();
+    const [pastYearEvents, setPastYearEvents] = useState();
     const classes = useStyles();
     const theme = useTheme();
+
+    useEffect(() => {
+        if (allSales === null) {
+            setAllSales(numberOfSales);
+        }
+    }, [])
+    console.log("allSales", allSales);
 
     const handleChangeTab = (event, newValue) => {
         setSelectedTab(newValue);
@@ -161,24 +175,12 @@ export default function DashboardPage(props) {
                     </Widget>
                 </Grid>
                 <Grid item lg={3} md={8} sm={6} xs={12}>
-                    <BigStat product="All purchase" total={{
-                        monthly: 4232,
-                        weekly: 1465,
-                        daily: 199,
-                        percent: {value: 3.7, profit: false}
-                    }}
-                             color="primary"
-                             registrations={ {
-                        monthly: { value: 830, profit: false },
-                        weekly: { value: 215, profit: true },
-                        daily: { value: 33, profit: true }
-                    }}
-                    bounce={ {
-                    monthly: { value: 4.5, profit: false },
-                    weekly: { value: 3, profit: true },
-                    daily: { value: 3.25, profit: true }
-                }}
-                    />
+                    <AllProducts
+                        title="ALL PRODUCTS"
+                        total={{
+                            ...allSales,
+                            percent: {value: 3.7, profit: false}
+                        }}/>
                 </Grid>
                 {mock.bigStat.map(stat => (
                     <Grid item md={4} sm={6} xs={12} key={stat.product}>

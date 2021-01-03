@@ -2,6 +2,15 @@ import {getAllEventsSync} from "../API";
 import {parseError} from "../../utils/Parser";
 import moment from "moment";
 
+export function numberOfSales() {
+    return {
+        daily: allEventsToday()?.length,
+        weekly: allEventsPastWeek()?.length,
+        monthly: allEventsPastMonth()?.length,
+        year: allEventsPastYear()?.length,
+    };
+}
+
 export function todayStatistics() {
     return allEventsToday();
 }
