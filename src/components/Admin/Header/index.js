@@ -95,7 +95,7 @@ export default function Header(props) {
                             color="primary"
                             onClick={() => signOut(userDispatch, props.history)}
                         >
-                            Sign Out
+                            Desconectar
                         </Typography>
                     </div>
                 </Menu>

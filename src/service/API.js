@@ -1,5 +1,5 @@
 import {ADMIN, ROOT} from "../routes/paths";
-import * as axios from "axios";
+import axios from 'axios';
 import {parseError} from "../utils/Parser";
 
 export function loginUser(dispatch, username, password, history, setIsLoading, setError) {
