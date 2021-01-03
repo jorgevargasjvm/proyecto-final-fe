@@ -56,6 +56,10 @@ export async function registration(dispatch, user, history, setIsLoading, setErr
     })
 }
 
+export async function getAllEventTypes() {
+    return axios('http://3.93.68.19:8002/event-types');
+}
+
 export async function getAllUsers() {
     return axios('http://3.93.68.19:8001/users');
 }
