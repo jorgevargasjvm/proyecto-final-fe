@@ -318,7 +318,7 @@ export default function PurchasePage(props) {
                         </MuiPickersUtilsProvider>
                     </FlexRow>
                 </Box>
-                    <img src={PayPal} style={{width: "60px", marginRight: "10px"}} alt="paypal"/>
+                    <img src={PayPal} style={{width: "60px"}} alt="paypal"/>
                 <Button variant="contained" color="primary" onClick={handlePaypal}>Pagar</Button>
             </Wrapper>
             <Modal
