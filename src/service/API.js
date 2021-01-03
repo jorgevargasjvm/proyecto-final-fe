@@ -1,35 +1,31 @@
 import {ADMIN, ROOT} from "../routes/paths";
 import * as axios from "axios";
+import {parseError} from "../utils/Parser";
 
 export function loginUser(dispatch, email, password, history, setIsLoading, setError) {
     setIsLoading(true);
-
-    if (!!email && !!password) {
-        setTimeout(() => {
-            setError(null)
-            setIsLoading(false)
-            dispatch({type: 'LOGIN_SUCCESS'})
-            localStorage.setItem('loggedUser', JSON.stringify({email: email, name: "test"}))
-            if (email.includes("admin")) {
-                localStorage.setItem("is_admin", true);
-                history.push(ADMIN);
-            } else {
-                history.push(ROOT);
-            }
-            window.location.reload();
-        }, 2000);
-    } else {
-        dispatch({type: "LOGIN_FAILURE"});
-        setError(true);
+    axios(`http://3.93.68.19:8001/users/find?username=${email}&password=${password}`).then(response => {
+        localStorage.setItem('loggedUser', JSON.stringify(response?.data))
+        if (response?.data?.roles.includes("ADMIN")) {
+            localStorage.setItem("is_admin", true);
+        }
+        setIsLoading(false)
+        dispatch({type: 'LOGIN_SUCCESS'})
+        window.location.reload();
+    }).catch(error => {
+        let err = parseError(error);
+        setError(err);
         setIsLoading(false);
-    }
+    });
 }
 
-export function signOut(dispatch, history) {
+export function signOut(dispatch, history, setLogoutBtnLoading) {
+    setLogoutBtnLoading(true);
     localStorage.removeItem("loggedUser");
     localStorage.removeItem("is_admin");
     dispatch({type: "SIGN_OUT_SUCCESS"});
     history.push(ROOT);
+    setLogoutBtnLoading(false);
 }
 
 export async function registration(dispatch, user, history, setIsLoading, setError) {
@@ -48,8 +44,9 @@ export async function registration(dispatch, user, history, setIsLoading, setErr
         window.location.reload();
         setIsLoading(false);
     }).catch(error => {
-        setError(error);
         console.log("ERROR REGISTRATION", error);
+        let err = parseError(error);
+        setError(err);
         setIsLoading(false);
     })
 }
