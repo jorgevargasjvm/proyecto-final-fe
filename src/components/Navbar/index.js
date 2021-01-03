@@ -37,7 +37,7 @@ const Navbar = ({toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSign
                         <NavLinks to='boda'>BODA</NavLinks>
                     </NavItem>
                     <NavItem>
-                        <NavLinks to='cumpeanos'>CUMPLEANO</NavLinks>
+                        <NavLinks to='cumpleanos'>CUMPLEANO</NavLinks>
                     </NavItem>
                     <NavItem>
                         <NavLinks to='video-de-evento'>VIDEO DE EVENTO</NavLinks>

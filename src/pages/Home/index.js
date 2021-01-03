@@ -8,7 +8,7 @@ import {useSnackbar} from "notistack";
 import {loginFormValidation, registrationFormValidation} from "./Validation";
 import {animateScroll as scroll} from "react-scroll";
 import InfoSection from "../../components/InfoSection";
-import {homeObjFour, homeObjOne, homeObjThree, homeObjTwo} from '../Data'
+import {homeObjFour, homeObjOne, homeObjThree, homeObjTwo} from './Data'
 import {loginUser, registration, signOut} from "../../service/API";
 import {useUserDispatch, useUserState} from "../../context/UserContext";
 

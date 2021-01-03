@@ -23,8 +23,54 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import PayPal from '../../assets/images/pp.png'
+import {useUserDispatch, useUserState} from "../../context/UserContext";
+import {animateScroll as scroll} from "react-scroll";
+import {loginFormValidation, registrationFormValidation} from "../Home/Validation";
+import {loginUser, registration, signOut} from "../../service/API";
+import Modal from "../../components/Modals/SingUpSignIn";
+import {useSnackbar} from "notistack";
+import {BuyEvent} from "../../service/Purchase";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {purchaseValidation} from "./Validtaion";
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 
-export default function PurchasePage() {
+export default function PurchasePage(props) {
+    const {enqueueSnackbar} = useSnackbar();
+
+    useEffect(()=>{
+        const query = new URLSearchParams(props.location.search);
+
+        const fromPaypal = query.get('success')
+        if (fromPaypal){
+            enqueueSnackbar("La compra se realiza correctamente con PayPal", {
+                variant: 'success',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            })
+        }
+    }, [])
+    const userDispatch = useUserDispatch();
+    const wrapperRef = React.useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [error, setError] = useState(null);
+    const [registrationButtonLoading, setRegistrationButtonLoading] = useState(false);
+    const [loginButtonLoading, setLoginButtonLoading] = useState(false);
+    const [logoutBtnLoading, setLogoutBtnLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false)
+    const [currentView, setCurrentView] = React.useState("signUp")
+    const [user, setUser] = useState({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        rePassword: ""
+    });
+
+    let {loggedUser, isAdmin} = useUserState();
+    if (loggedUser)
+        loggedUser = JSON.parse(loggedUser);
 
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
@@ -32,20 +78,163 @@ export default function PurchasePage() {
         setSelectedDate(date);
     };
 
-    const onClickBuy = () => {
-        console.log('test')
+    const [purchaseBtnLoading, setPurchaseBtnLoading] = React.useState(false)
+    const onClickBuy = (event) => {
+
+        event?.preventDefault();
+        let error = purchaseValidation(purchase);
+        if (error.trim() !== "") {
+            enqueueSnackbar(error, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            })
+        } else {
+            BuyEvent(purchase, setPurchaseBtnLoading);
+        }
     }
 
+    const [purchase, setPurchase] = React.useState({
+        username: loggedUser? loggedUser?.username : "",
+        email: loggedUser? loggedUser?.email : "",
+        comentarios: "",
+        direccion: "",
+        estado: "",
+    })
     const [evento, setEvento] = React.useState('');
 
-    const handleChange = (event) => {
+    const handleEventOnChange = (event) => {
         setEvento(event.target.value);
     };
 
+    const handleInputChange = (event) => {
+        const {name, value} = event.target;
+        setPurchase({...purchase, [name]:value})
+
+    }
+
+    const toggle = () => {
+        setIsOpen(!isOpen)
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    }
+
+    const changeView = (view) => {
+        setCurrentView(view)
+    }
+
+    const toggleHome = () => {
+        scroll.scrollToTop()
+    };
+
+    const onSignInLoginInputChange = (event) => {
+        const {name, value} = event?.target;
+        setUser({...user, [name]: value})
+    }
+
+    const handleRegistration = (event) => {
+        event?.preventDefault();
+        let error = registrationFormValidation(user);
+        if (error.trim() !== "") {
+            enqueueSnackbar(error, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            })
+        } else {
+            registration(userDispatch, user, props.history, setRegistrationButtonLoading, setError);
+        }
+    }
+    const handleLogin = (event) => {
+        event?.preventDefault();
+        let error = loginFormValidation(user);
+        if (error.trim() !== "") {
+            enqueueSnackbar(error, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            })
+        } else {
+            loginUser(
+                userDispatch,
+                user.username,
+                user.password,
+                props.history,
+                setLoginButtonLoading,
+                setError,
+            )
+        }
+    }
+
+    const handleSignOut = () => {
+        signOut(userDispatch, props?.history, setLogoutBtnLoading);
+    }
+
+    const handleSignInBtn = () => {
+        changeView("logIn");
+        setShowModal(true);
+    }
+
+    const handleSignUpBtn = () => {
+        changeView("signUp");
+        setShowModal(true);
+    }
+
+    if (error) {
+        enqueueSnackbar(error, {
+            variant: 'error',
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'left',
+            },
+        })
+        setError(null);
+    }
+
+    const handlePaypal = () =>{
+        let error = purchaseValidation(purchase);
+        if (error.trim() !== "") {
+            enqueueSnackbar(error, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            })
+        } else {
+            props.history.push('/paypal');
+        }
+    }
+
     return(
         <div>
-            <Sidebar />
-            <Navbar />
+            <Sidebar
+                isOpen={isOpen}
+                handleSignInBtn={handleSignInBtn}
+                handleSignUpBtn={handleSignUpBtn}
+                handleSignOut={handleSignOut}
+                logoutBtnLoading={logoutBtnLoading}
+                loggedUser={loggedUser}
+                isAdmin={isAdmin}
+                toggle={toggle}/>
+            <Navbar
+                toggle={toggle}
+                toggleHome={toggleHome}
+                loggedUser={loggedUser}
+                handleSignOut={handleSignOut}
+                handleSignInBtn={handleSignInBtn}
+                handleSignUpBtn={handleSignUpBtn}
+                isAdmin={isAdmin}
+                logoutBtnLoading={logoutBtnLoading}
+            />
         <Wrapper>
             <h1>TEXT</h1>
             <Box>
@@ -57,7 +246,7 @@ export default function PurchasePage() {
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
                         value={evento}
-                        onChange={handleChange}
+                        onChange={handleEventOnChange}
                         label="Evento"
                     >
                         <MenuItem value={'pre-boda'}>PRE-BODA</MenuItem>
@@ -70,25 +259,22 @@ export default function PurchasePage() {
                 </FlexRow>
                 <FlexRow style={{marginTop: "55px"}}>
                 <PersonIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField id="first_name" label="Nombre" type="text" variant="outlined" />
+                <TextField label="Nombre de usario" name="username" onChange={handleInputChange} value={purchase.username} type="text" variant="outlined" />
 
-                <PersonIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField id="last_name" label="Apellido" type="text" variant="outlined" />
+                <ChatBubbleIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
+                <TextField label="Comentarios" value={purchase.comentarios} name="comentarios" onChange={handleInputChange} type="text" variant="outlined" />
 
                 <MailIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField id="email" label="Correo electrónico" type="text" variant="outlined" />
+                <TextField label="Correo electrónico" value={purchase.email} name="email" onChange={handleInputChange} type="text" variant="outlined" />
             </FlexRow>
                 <FlexRow style={{marginTop: "55px"}}>
-                <PhoneIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField id="phone" label="Teléfono" type="text" variant="outlined" />
+                <LocationCityIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
+                <TextField label="Estado" value={purchase.estado} name="estado" onChange={handleInputChange} type="text" variant="outlined" />
 
 
                 <HomeIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField id="address" label="La dirección" type="text" variant="outlined" />
+                <TextField label="La dirección" value={purchase.direccion} name="direccion" onChange={handleInputChange} type="text" variant="outlined" />
 
-
-                <LocationCityIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField id="city" label="Ciudad" type="text" variant="outlined" />
             </FlexRow>
                 <FlexRow style={{marginTop: "55px"}}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -106,14 +292,30 @@ export default function PurchasePage() {
                     </MuiPickersUtilsProvider>
                 </FlexRow>
             </Box>
-            <img src={PayPal} style={{height: "60px"}}/>
+            <FlexRow>
+                <img src={PayPal} style={{width: "60px", marginRight: "10px"}}/>
+                <Button variant="contained" color="default" onClick={handlePaypal}>Conectar paypal
+                </Button>
+            </FlexRow>
             <FlexRow style={{marginTop: "25px"}}>
                 {/* <img style={{width: "40px", height: "40px", margintRight: "10px"}} src={PayPal} /> */}
                 <Button variant="contained" color="primary" onClick={onClickBuy}>
-                    Comprar
+                    {purchaseBtnLoading? <CircularProgress />: "Comprar"}
                 </Button>
             </FlexRow>
         </Wrapper>
+            <Modal
+                showModal={showModal}
+                handleCloseModal={handleCloseModal}
+                changeView={changeView}
+                currentView={currentView}
+                onSignInLoginInputChange={onSignInLoginInputChange}
+                user={user}
+                registrationButtonLoading={registrationButtonLoading}
+                loginButtonLoading={loginButtonLoading}
+                handleRegistration={handleRegistration}
+                handleLogin={handleLogin}
+                wrapperRef={wrapperRef}/>
         </div>
     )
 }
