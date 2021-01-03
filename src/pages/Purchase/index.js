@@ -251,7 +251,7 @@ export default function PurchasePage(props) {
                 logoutBtnLoading={logoutBtnLoading}
             />
             <Wrapper>
-                <h1>TEXT</h1>
+                <h1>Programación de eventos</h1>
                 <Box>
                     <FlexRow>
                         <VideocamIcon style={{width: "55px", height: "55px", marginRight: "10px", marginTop: "25px"}}
