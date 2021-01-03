@@ -12,7 +12,7 @@ import {useUserDispatch, useUserState} from "../../context/UserContext";
 
 export default function HomePage(props) {
     let {loggedUser, isAdmin} = useUserState();
-    if(loggedUser)
+    if (loggedUser)
         loggedUser = JSON.parse(loggedUser);
     const userDispatch = useUserDispatch();
     const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +93,7 @@ export default function HomePage(props) {
     }
 
     const handleSignOut = () => {
-        signOut(userDispatch, props?.history);
+        signOut(userDispatch, props?.history, setLogoutBtnLoading);
     }
 
     const handleSignInBtn = () => {
@@ -106,7 +106,7 @@ export default function HomePage(props) {
         setShowModal(true);
     }
 
-    if(error)
+    if (error) {
         enqueueSnackbar(error, {
             variant: 'error',
             anchorOrigin: {
@@ -114,7 +114,8 @@ export default function HomePage(props) {
                 horizontal: 'left',
             },
         })
-
+        setError(null);
+    }
     return (
         <div>
             <Sidebar
