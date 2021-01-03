@@ -5,3 +5,4 @@ export const USERS = ADMIN +"/users";
 export const NOTIFICATIONS = ADMIN +"/notifications";
 export const EVENTS = ADMIN +"/events";
 export const PURCHASE = "/purchase";
+export const PAYPAL = "/paypal";

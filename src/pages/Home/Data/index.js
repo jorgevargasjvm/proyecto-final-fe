@@ -1,11 +1,11 @@
-import Img1 from '../../assets/images/1.jpg'
-import Img2 from '../../assets/images/2.jpg'
-import Img3 from '../../assets/images/3.jpg'
-import Img4 from '../../assets/images/4.jpg'
+import Img1 from '../../../assets/images/1.jpg'
+import Img2 from '../../../assets/images/2.jpg'
+import Img3 from '../../../assets/images/3.jpg'
+import Img4 from '../../../assets/images/4.jpg'
 
 export const homeObjOne = {
     id: 'pre-boda',
-    to: '#',
+    to: '/purchase',
     lightBg: false,
     lightText: true,
     lightTextDesc: true,
@@ -39,12 +39,12 @@ export const homeObjTwo = {
     darkText: true,
     show: true,
     isChoseFile: true,
-    to: '#'
+    to: '/purchase'
 };
 
 export const homeObjThree = {
     id: 'cumpleanos',
-    to: '#',
+    to: '/purchase',
     lightBg: false,
     lightText: true,
     lightTextDesc: true,
@@ -59,6 +59,7 @@ export const homeObjThree = {
     primary: true,
     darkText: false,
     show: false,
+
 };
 
 export const homeObjFour = {
@@ -78,5 +79,5 @@ export const homeObjFour = {
     darkText: true,
     show: true,
     isChoseFile: true,
-    to: '#'
+    to: '/purchase'
 };
