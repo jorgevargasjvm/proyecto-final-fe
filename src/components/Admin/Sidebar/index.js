@@ -28,33 +28,28 @@ const structure = [
     },
     {
         id: 1,
-        label: "Statistics",
+        label: "Estadísticas",
         link: STATISTICS,
         icon: <Timeline/>
     },
     {
         id: 2,
-        label: "Users",
+        label: "Usuarios",
         link: USERS,
         icon: <PeopleAltIcon/>
     },
     {
         id: 3,
-        label: "Notifications",
+        label: "Notificaciones",
         link: NOTIFICATIONS,
         icon: <NotificationsIcon/>
     },
     {
         id: 4,
-        label: "Events",
+        label: "Eventos",
         link: EVENTS,
         icon: <Loyalty/>
     },
-    {id: 10, type: "divider"},
-    {id: 11, type: "title", label: "Help"},
-    {id: 12, label: "Instruction", link: "", icon: <LibraryIcon/>},
-    {id: 13, label: "Support", link: "", icon: <SupportIcon/>},
-    {id: 14, label: "FAQ", link: "", icon: <FAQIcon/>},
 ];
 
 function Layout({location}) {
