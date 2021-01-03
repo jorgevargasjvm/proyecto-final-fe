@@ -27,7 +27,7 @@ export default function HomePage(props) {
     const wrapperRef = React.useRef(null);
     const [user, setUser] = useState({
         name: "",
-        surname: "",
+        username: "",
         email: "",
         password: "",
         rePassword: ""
@@ -85,7 +85,7 @@ export default function HomePage(props) {
         } else {
             loginUser(
                 userDispatch,
-                user.email,
+                user.username,
                 user.password,
                 props.history,
                 setLoginButtonLoading,

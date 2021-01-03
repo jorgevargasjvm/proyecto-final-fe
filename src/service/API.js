@@ -2,16 +2,21 @@ import {ADMIN, ROOT} from "../routes/paths";
 import * as axios from "axios";
 import {parseError} from "../utils/Parser";
 
-export function loginUser(dispatch, email, password, history, setIsLoading, setError) {
+export function loginUser(dispatch, username, password, history, setIsLoading, setError) {
     setIsLoading(true);
-    axios(`http://3.93.68.19:8001/users/find?username=${email}&password=${password}`).then(response => {
-        localStorage.setItem('loggedUser', JSON.stringify(response?.data))
-        if (response?.data?.roles.includes("ADMIN")) {
-            localStorage.setItem("is_admin", true);
+    axios(`http://3.93.68.19:8001/users/find?username=${username}&password=${password}`).then(response => {
+        if (!response?.data) {
+            setIsLoading(false);
+            setError("Username or password incorrect!");
+        } else {
+            localStorage.setItem('loggedUser', JSON.stringify(response?.data))
+            if (response?.data?.roles.includes("ADMIN")) {
+                localStorage.setItem("is_admin", true);
+            }
+            setIsLoading(false)
+            dispatch({type: 'LOGIN_SUCCESS'})
+            window.location.reload();
         }
-        setIsLoading(false)
-        dispatch({type: 'LOGIN_SUCCESS'})
-        window.location.reload();
     }).catch(error => {
         let err = parseError(error);
         setError(err);
@@ -31,7 +36,7 @@ export function signOut(dispatch, history, setLogoutBtnLoading) {
 export async function registration(dispatch, user, history, setIsLoading, setError) {
     setIsLoading(true);
     let newUser = user;
-    newUser.roles = "USER";
+    newUser.roles = "CLIENT";
     axios('http://3.93.68.19:8001/users', {method: "POST", data: newUser}).then(response => {
         dispatch({type: 'LOGIN_SUCCESS'})
         localStorage.setItem('loggedUser', JSON.stringify(response?.data))
@@ -65,6 +70,10 @@ export async function editUser(user) {
 
 export async function deleteUser(userId) {
     return axios(`http://3.93.68.19:8001/users/${userId}`, {method: "DELETE"})
+}
+
+export function getAllEventsSync() {
+    return axios('http://3.93.68.19:8002/events');
 }
 
 export async function getAllEvents() {

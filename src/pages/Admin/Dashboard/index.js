@@ -34,13 +34,17 @@ const PieChartData = [
     {name: "Group D", value: 200, color: "success"},
 ];
 
-export default function DashboardPage(props) {
-    const [selectedTab, setSelectedTab] = useState(0);
-    var classes = useStyles();
-    var theme = useTheme();
+const TABS = {
+    today: 0,
+    week: 1,
+    month: 2,
+    year: 3
+};
 
-    // local
-    var [mainChartState, setMainChartState] = useState("monthly");
+export default function DashboardPage(props) {
+    const [selectedTab, setSelectedTab] = useState(TABS.today);
+    const classes = useStyles();
+    const theme = useTheme();
 
     const handleChangeTab = (event, newValue) => {
         setSelectedTab(newValue);
@@ -330,8 +334,8 @@ export default function DashboardPage(props) {
                                     </div>
                                 </div>
                                 <Select
-                                    value={mainChartState}
-                                    onChange={e => setMainChartState(e.target.value)}
+                                    value={selectedTab}
+                                    onChange={e => setSelectedTab(e.target.value)}
                                     input={
                                         <OutlinedInput
                                             labelWidth={0}
@@ -343,9 +347,10 @@ export default function DashboardPage(props) {
                                     }
                                     autoWidth
                                 >
-                                    <MenuItem value="daily">Daily</MenuItem>
-                                    <MenuItem value="weekly">Weekly</MenuItem>
-                                    <MenuItem value="monthly">Monthly</MenuItem>
+                                    <MenuItem value={0}>Daily</MenuItem>
+                                    <MenuItem value={1}>Weekly</MenuItem>
+                                    <MenuItem value={2}>Monthly</MenuItem>
+                                    <MenuItem value={3}>Year</MenuItem>
                                 </Select>
                             </div>
                         }

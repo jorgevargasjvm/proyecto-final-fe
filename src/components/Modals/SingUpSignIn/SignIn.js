@@ -11,13 +11,13 @@ export default function SignInForm(props) {
                 </legend>
                 <ul>
                     <li>
-                        <label htmlFor="email">Correo electrónico:</label>
+                        <label htmlFor="username">Nombre de usuario:</label>
                         <input
-                            type="email"
-                            name="email"
-                            value={props?.user?.email}
+                            type="text"
+                            name="username"
+                            value={props?.user?.username}
                             onChange={(event) => props?.onSignInLoginInputChange(event)}
-                            id="email"/>
+                            id="username"/>
                     </li>
                     <li>
                         <label htmlFor="password">Contraseña:</label>
@@ -30,9 +30,11 @@ export default function SignInForm(props) {
                     </li>
                 </ul>
             </fieldset>
-            <button onClick={(event)=>props?.handleLogin(event)}>{props?.loginButtonLoading ? <CircularProgress/> : "Iniciar sesión"}</button>
+            <button onClick={(event) => props?.handleLogin(event)}>{props?.loginButtonLoading ?
+                <CircularProgress/> : "Iniciar sesión"}</button>
             <button type="button" onClick={() => props?.changeView("signUp")}>
-                Crea una cuenta</button>
+                Crea una cuenta
+            </button>
         </form>
     )
 }
