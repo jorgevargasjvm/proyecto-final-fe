@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../Buttons';
+import {Link } from 'react-router-dom';
 import {
     InfoContainer,
     InfoWrapper,
@@ -15,9 +16,9 @@ import {
     Img,
     Row
 } from './InfoElements';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 function InfoSection(props) {
+    {console.log(props)}
     return (
         <div>
             <InfoContainer lightBg={props?.lightBg} id={props?.id}>
@@ -29,12 +30,6 @@ function InfoSection(props) {
                                 <Heading lightText={props?.lightText}>{props?.headline}</Heading>
                                 <Subtitle darkText={props?.darkText}>{props?.description}</Subtitle>
                                 <BtnWrap>
-                                    {props?.isChoseFile ?
-                                        <input type="file"
-                                            ref={props?.hiddenFileInput}
-                                            onChange={props?.handleChange}
-                                            style={{ display: 'none' }}
-                                            accept="image/x-png,image/gif,image/jpeg" /> : <></>}
                                     <Row>
                                         <Button
                                             onClick={props?.handleClick}
@@ -49,10 +44,7 @@ function InfoSection(props) {
                                             dark2={props?.dark2 ? 1 : 0}>
                                             {props?.buttonLabel}
                                         </Button>
-                                        {props?.showProcedButton ?
-                                            <Button to="#" onClick={props?.handleImageProced}>
-                                                {props?.loading ? <CircularProgress /> : "RUN PROCESSING"}
-                                            </Button> : <></>}</Row>
+                                    </Row>
                                 </BtnWrap>
                             </TextWrapper>
                         </Column1>

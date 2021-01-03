@@ -5,7 +5,7 @@ import Img4 from '../../assets/images/4.jpg'
 
 export const homeObjOne = {
     id: 'pre-boda',
-    to: '#',
+    to: '/purchase',
     lightBg: false,
     lightText: true,
     lightTextDesc: true,
@@ -39,7 +39,7 @@ export const homeObjTwo = {
     darkText: true,
     show: true,
     isChoseFile: true,
-    to: '#'
+    to: '/purchase'
 };
 
 export const homeObjThree = {
