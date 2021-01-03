@@ -28,6 +28,15 @@ export default function SignUpForm(props) {
                             onChange={(event) => props?.onSignInLoginInputChange(event)}/>
                     </li>
                     <li>
+                        <label htmlFor="username">Nombre de usuario:</label>
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            value={props?.user?.username}
+                            onChange={(event) => props?.onSignInLoginInputChange(event)}/>
+                    </li>
+                    <li>
                         <label htmlFor="password">Contraseña:</label>
                         <input
                             type="password"
@@ -47,7 +56,8 @@ export default function SignUpForm(props) {
                     </li>
                 </ul>
             </fieldset>
-            <button onClick={(event)=>props?.handleRegistration(event)}>{props?.registrationButtonLoading ? <CircularProgress/> : "Enviar"}</button>
+            <button onClick={(event) => props?.handleRegistration(event)}>{props?.registrationButtonLoading ?
+                <CircularProgress/> : "Enviar"}</button>
             <button type="button" onClick={() => props?.changeView("logIn")}>Tienes una cuenta?</button>
         </form>
     )

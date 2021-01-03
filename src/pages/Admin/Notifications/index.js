@@ -4,6 +4,8 @@ import Table from "../../../components/Table";
 import {columns} from "./table/columns";
 import {Grid} from "@material-ui/core";
 import {addNotifications, deleteNotifications, editNotifications, getAllNotifications} from "../../../service/API";
+import {parseError} from "../../../utils/Parser";
+import {useSnackbar} from "notistack";
 
 const options = {
     exportButton: true,
@@ -13,6 +15,7 @@ const options = {
 }
 
 export default function NotificationsPage() {
+    const {enqueueSnackbar} = useSnackbar();
     const [notificationList, setNotificationList] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     React.useEffect(() => {
@@ -21,6 +24,14 @@ export default function NotificationsPage() {
                 setNotificationList(response?.data);
                 setLoading(false);
             }).catch(error => {
+                let err = parseError(error);
+                enqueueSnackbar(err, {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                    },
+                });
                 setLoading(false);
             })
         }
@@ -36,7 +47,14 @@ export default function NotificationsPage() {
             if (resolve)
                 resolve();
         }).catch(error => {
-            console.log("ERROR ADD USER", error);
+            let err = parseError(error);
+            enqueueSnackbar(err, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            });
             reject();
         });
     };
@@ -50,7 +68,14 @@ export default function NotificationsPage() {
             if (resolve)
                 resolve();
         }).catch(error => {
-            console.log("ERROR ADD USER", error);
+            let err = parseError(error);
+            enqueueSnackbar(err, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            });
             reject();
         });
     };
@@ -64,7 +89,14 @@ export default function NotificationsPage() {
             if (resolve)
                 resolve();
         }).catch(error => {
-            console.log("ERROR ADD USER", error);
+            let err = parseError(error);
+            enqueueSnackbar(err, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            });
             reject();
         });
     };

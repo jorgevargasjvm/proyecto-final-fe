@@ -12,6 +12,10 @@ export const columns = () => {
             title: "Nombre",
         },
         {
+            field: "username",
+            title: "Nombre de usuario",
+        },
+        {
             field: "password",
             title: "Contraseña",
         },
