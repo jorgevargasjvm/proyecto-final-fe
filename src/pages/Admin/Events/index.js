@@ -1,11 +1,11 @@
 import React from "react";
 import PageTitle from "../../../components/PageTitle";
-import Table from "../../../components/Table";
 import {columns} from "./table/columns";
 import {Grid} from "@material-ui/core";
 import {addEvent, deleteEvent, editEvent, getAllEvents} from "../../../service/API";
 import {parseError} from "../../../utils/Parser";
 import {useSnackbar} from "notistack";
+import OnlyDeleteTable from "../../../components/Tables/OnlyDeleteTable";
 
 const options = {
     exportButton: true,
@@ -106,15 +106,15 @@ export default function EventsPage() {
             <PageTitle title="Eventos"/>
             <Grid container spacing={4}>
                 <Grid item xs={12}>
-                    <Table
+                    <OnlyDeleteTable
                         title="Lista de eventos"
                         data={eventList}
                         columns={cols}
                         isLoading={loading}
                         options={options}
-                        handleTableAdd={handleAddEvent}
+                        // handleTableAdd={handleAddEvent}
                         handleTableDelete={handleRemoveEvent}
-                        handleTableEdit={handleEditEvent}
+                        // handleTableEdit={handleEditEvent}
                     />
                 </Grid>
             </Grid>

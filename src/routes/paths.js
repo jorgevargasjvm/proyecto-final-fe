@@ -4,5 +4,5 @@ export const STATISTICS = ADMIN+"/statistics";
 export const USERS = ADMIN +"/users";
 export const NOTIFICATIONS = ADMIN +"/notifications";
 export const EVENTS = ADMIN +"/events";
-export const PURCHASE = "/purchase";
-export const PAYPAL = "/paypal";
+export const PURCHASE = "/purchase/:dataId";
+export const PAYPAL = "/paypal/:dataId";

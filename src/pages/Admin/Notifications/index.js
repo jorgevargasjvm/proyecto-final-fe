@@ -1,6 +1,6 @@
 import React from "react";
 import PageTitle from "../../../components/PageTitle";
-import Table from "../../../components/Table";
+import Table from "../../../components/Tables/Table";
 import {columns} from "./table/columns";
 import {Grid} from "@material-ui/core";
 import {addNotifications, deleteNotifications, editNotifications, getAllNotifications} from "../../../service/API";

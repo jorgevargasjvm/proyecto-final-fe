@@ -1,19 +1,7 @@
 import React, {useState} from "react";
-import {Grid, LinearProgress, MenuItem, OutlinedInput, Select} from "@material-ui/core";
+import {Grid, LinearProgress} from "@material-ui/core";
 import {useTheme} from "@material-ui/styles";
-import {
-    Area,
-    AreaChart,
-    Cell,
-    ComposedChart,
-    Line,
-    LineChart,
-    Pie,
-    PieChart,
-    ResponsiveContainer,
-    XAxis,
-    YAxis,
-} from "recharts";
+import {Line, LineChart,} from "recharts";
 
 // styles
 import useStyles from "./styles";
@@ -25,14 +13,6 @@ import PageTitle from "../../../components/PageTitle";
 import {Typography} from "../../../components/Admin/Wrappers";
 import {LargeDot} from "../../../components/Dot";
 import BigStat from "./components/BigStat/BigStat";
-
-const mainChartData = getMainChartData();
-const PieChartData = [
-    {name: "Group A", value: 400, color: "primary"},
-    {name: "Group B", value: 300, color: "secondary"},
-    {name: "Group C", value: 300, color: "warning"},
-    {name: "Group D", value: 200, color: "success"},
-];
 
 const TABS = {
     today: 0,
@@ -181,226 +161,24 @@ export default function DashboardPage(props) {
                     </Widget>
                 </Grid>
                 <Grid item lg={3} md={8} sm={6} xs={12}>
-                    <Widget
-                        title="Server Overview"
-                        upperTitle
-                        className={classes.card}
-                        bodyClass={classes.fullHeightBody}
-                    >
-                        <div className={classes.serverOverviewElement}>
-                            <Typography
-                                color="text"
-                                colorBrightness="secondary"
-                                className={classes.serverOverviewElementText}
-                                noWrap
-                            >
-                                60% / 37°С / 3.3 Ghz
-                            </Typography>
-                            <div className={classes.serverOverviewElementChartWrapper}>
-                                <ResponsiveContainer height={50} width="99%">
-                                    <AreaChart data={getRandomData(10)}>
-                                        <Area
-                                            type="natural"
-                                            dataKey="value"
-                                            stroke={theme.palette.secondary.main}
-                                            fill={theme.palette.secondary.light}
-                                            strokeWidth={2}
-                                            fillOpacity="0.25"
-                                        />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                        <div className={classes.serverOverviewElement}>
-                            <Typography
-                                color="text"
-                                colorBrightness="secondary"
-                                className={classes.serverOverviewElementText}
-                                noWrap
-                            >
-                                54% / 31°С / 3.3 Ghz
-                            </Typography>
-                            <div className={classes.serverOverviewElementChartWrapper}>
-                                <ResponsiveContainer height={50} width="99%">
-                                    <AreaChart data={getRandomData(10)}>
-                                        <Area
-                                            type="natural"
-                                            dataKey="value"
-                                            stroke={theme.palette.primary.main}
-                                            fill={theme.palette.primary.light}
-                                            strokeWidth={2}
-                                            fillOpacity="0.25"
-                                        />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                        <div className={classes.serverOverviewElement}>
-                            <Typography
-                                color="text"
-                                colorBrightness="secondary"
-                                className={classes.serverOverviewElementText}
-                                noWrap
-                            >
-                                57% / 21°С / 3.3 Ghz
-                            </Typography>
-                            <div className={classes.serverOverviewElementChartWrapper}>
-                                <ResponsiveContainer height={50} width="99%">
-                                    <AreaChart data={getRandomData(10)}>
-                                        <Area
-                                            type="natural"
-                                            dataKey="value"
-                                            stroke={theme.palette.warning.main}
-                                            fill={theme.palette.warning.light}
-                                            strokeWidth={2}
-                                            fillOpacity="0.25"
-                                        />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                    </Widget>
-                </Grid>
-                <Grid item lg={3} md={4} sm={6} xs={12}>
-                    <Widget title="Revenue Breakdown" upperTitle className={classes.card}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <ResponsiveContainer width="100%" height={144}>
-                                    <PieChart>
-                                        <Pie
-                                            data={PieChartData}
-                                            innerRadius={30}
-                                            outerRadius={40}
-                                            dataKey="value"
-                                        >
-                                            {PieChartData.map((entry, index) => (
-                                                <Cell
-                                                    key={`cell-${index}`}
-                                                    fill={theme.palette[entry.color].main}
-                                                />
-                                            ))}
-                                        </Pie>
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <div className={classes.pieChartLegendWrapper}>
-                                    {PieChartData.map(({name, value, color}, index) => (
-                                        <div key={color} className={classes.legendItemContainer}>
-                                            <LargeDot color={color}/>
-                                            <Typography style={{whiteSpace: "nowrap", fontSize: 12}}>
-                                                &nbsp;{name}&nbsp;
-                                            </Typography>
-                                            <Typography color="text" colorBrightness="secondary">
-                                                &nbsp;{value}
-                                            </Typography>
-                                        </div>
-                                    ))}
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </Widget>
-                </Grid>
-                <Grid item xs={12}>
-                    <Widget
-                        bodyClass={classes.mainChartBody}
-                        header={
-                            <div className={classes.mainChartHeader}>
-                                <Typography
-                                    variant="h5"
-                                    color="text"
-                                    colorBrightness="secondary"
-                                >
-                                    Daily Line Chart
-                                </Typography>
-                                <div className={classes.mainChartHeaderLabels}>
-                                    <div className={classes.mainChartHeaderLabel}>
-                                        <LargeDot color="warning"/>
-                                        <Typography className={classes.mainChartLegentElement}>
-                                            Tablet
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.mainChartHeaderLabel}>
-                                        <LargeDot color="primary"/>
-                                        <Typography className={classes.mainChartLegentElement}>
-                                            Mobile
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.mainChartHeaderLabel}>
-                                        <LargeDot color="secondary"/>
-                                        <Typography className={classes.mainChartLegentElement}>
-                                            Desktop
-                                        </Typography>
-                                    </div>
-                                </div>
-                                <Select
-                                    value={selectedTab}
-                                    onChange={e => setSelectedTab(e.target.value)}
-                                    input={
-                                        <OutlinedInput
-                                            labelWidth={0}
-                                            classes={{
-                                                notchedOutline: classes.mainChartSelectRoot,
-                                                input: classes.mainChartSelect,
-                                            }}
-                                        />
-                                    }
-                                    autoWidth
-                                >
-                                    <MenuItem value={0}>Daily</MenuItem>
-                                    <MenuItem value={1}>Weekly</MenuItem>
-                                    <MenuItem value={2}>Monthly</MenuItem>
-                                    <MenuItem value={3}>Year</MenuItem>
-                                </Select>
-                            </div>
-                        }
-                    >
-                        <ResponsiveContainer width="100%" minWidth={500} height={350}>
-                            <ComposedChart
-                                margin={{top: 0, right: -15, left: -15, bottom: 0}}
-                                data={mainChartData}
-                            >
-                                <YAxis
-                                    ticks={[0, 2500, 5000, 7500]}
-                                    tick={{fill: theme.palette.text.hint + "80", fontSize: 14}}
-                                    stroke={theme.palette.text.hint + "80"}
-                                    tickLine={false}
-                                />
-                                <XAxis
-                                    tickFormatter={i => i + 1}
-                                    tick={{fill: theme.palette.text.hint + "80", fontSize: 14}}
-                                    stroke={theme.palette.text.hint + "80"}
-                                    tickLine={false}
-                                />
-                                <Area
-                                    type="natural"
-                                    dataKey="desktop"
-                                    fill={theme.palette.background.light}
-                                    strokeWidth={0}
-                                    activeDot={false}
-                                />
-                                <Line
-                                    type="natural"
-                                    dataKey="mobile"
-                                    stroke={theme.palette.primary.main}
-                                    strokeWidth={2}
-                                    dot={false}
-                                    activeDot={false}
-                                />
-                                <Line
-                                    type="linear"
-                                    dataKey="tablet"
-                                    stroke={theme.palette.warning.main}
-                                    strokeWidth={2}
-                                    dot={{
-                                        stroke: theme.palette.warning.dark,
-                                        strokeWidth: 2,
-                                        fill: theme.palette.warning.main,
-                                    }}
-                                />
-                            </ComposedChart>
-                        </ResponsiveContainer>
-                    </Widget>
+                    <BigStat product="All purchase" total={{
+                        monthly: 4232,
+                        weekly: 1465,
+                        daily: 199,
+                        percent: {value: 3.7, profit: false}
+                    }}
+                             color="primary"
+                             registrations={ {
+                        monthly: { value: 830, profit: false },
+                        weekly: { value: 215, profit: true },
+                        daily: { value: 33, profit: true }
+                    }}
+                    bounce={ {
+                    monthly: { value: 4.5, profit: false },
+                    weekly: { value: 3, profit: true },
+                    daily: { value: 3.25, profit: true }
+                }}
+                    />
                 </Grid>
                 {mock.bigStat.map(stat => (
                     <Grid item md={4} sm={6} xs={12} key={stat.product}>

@@ -5,6 +5,7 @@ import Img4 from '../../../assets/images/4.jpg'
 
 export const homeObjOne = {
     id: 'pre-boda',
+    dataId: 1,
     to: '/purchase',
     lightBg: false,
     lightText: true,
@@ -24,6 +25,7 @@ export const homeObjOne = {
 
 export const homeObjTwo = {
     id: 'boda',
+    dataId: 2,
     lightBg: true,
     lightText: false,
     lightTextDesc: false,
@@ -44,6 +46,7 @@ export const homeObjTwo = {
 
 export const homeObjThree = {
     id: 'cumpleanos',
+    dataId: 3,
     to: '/purchase',
     lightBg: false,
     lightText: true,
@@ -64,6 +67,7 @@ export const homeObjThree = {
 
 export const homeObjFour = {
     id: 'video-de-evento',
+    dataId: 4,
     lightBg: true,
     lightText: false,
     lightTextDesc: false,

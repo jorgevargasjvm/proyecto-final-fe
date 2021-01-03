@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import { Button } from '../Buttons';
-import {Link } from 'react-router-dom';
+import React from 'react';
+import {Button} from '../Buttons';
 import {
-    InfoContainer,
-    InfoWrapper,
-    InfoRow,
+    BtnWrap,
     Column1,
     Column2,
-    TextWrapper,
-    TopLine,
     Heading,
-    Subtitle,
-    BtnWrap,
-    ImgWrap,
     Img,
-    Row
+    ImgWrap,
+    InfoContainer,
+    InfoRow,
+    InfoWrapper,
+    Row,
+    Subtitle,
+    TextWrapper,
+    TopLine
 } from './InfoElements';
 
 function InfoSection(props) {
-    {console.log(props)}
     return (
         <div>
             <InfoContainer lightBg={props?.lightBg} id={props?.id}>
@@ -33,7 +31,7 @@ function InfoSection(props) {
                                     <Row>
                                         <Button
                                             onClick={props?.handleClick}
-                                            to={props?.to}
+                                            to={`${props?.to}/${props?.dataId}`}
                                             smooth={true}
                                             duration={500}
                                             spy={true}
@@ -50,7 +48,7 @@ function InfoSection(props) {
                         </Column1>
                         <Column2>
                             <ImgWrap>
-                                <Img src={props?.img} alt={props?.alt} />
+                                <Img src={props?.img} alt={props?.alt}/>
                             </ImgWrap>
                         </Column2>
                     </InfoRow>

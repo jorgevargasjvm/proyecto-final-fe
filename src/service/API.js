@@ -56,7 +56,7 @@ export async function registration(dispatch, user, history, setIsLoading, setErr
     })
 }
 
-export async function getAllEventTypes() {
+export function getAllEventTypes() {
     return axios('http://3.93.68.19:8002/event-types');
 }
 
@@ -86,6 +86,15 @@ export async function getAllEvents() {
 
 export async function addEvent(event) {
     return axios('http://3.93.68.19:8002/events', {method: "POST", data: event})
+}
+
+export async function addPurachase(purachase, dataId) {
+    return axios(`http://3.93.68.19:8002/events?id=${dataId}`, {
+        method: "POST", data: {
+            nombreCliente: purachase?.username,
+            direccion: purachase?.direccion
+        }
+    });
 }
 
 export async function editEvent(event) {

@@ -1,23 +1,18 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {FlexRow} from "../../components/Flex";
 import PersonIcon from '@material-ui/icons/Person';
 import MailIcon from '@material-ui/icons/Mail';
-import PhoneIcon from '@material-ui/icons/Phone';
 import HomeIcon from '@material-ui/icons/Home';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
-import {Wrapper,Box  } from './styles';
+import {Box, Wrapper} from './styles';
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
+import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -26,28 +21,49 @@ import PayPal from '../../assets/images/pp.png'
 import {useUserDispatch, useUserState} from "../../context/UserContext";
 import {animateScroll as scroll} from "react-scroll";
 import {loginFormValidation, registrationFormValidation} from "../Home/Validation";
-import {loginUser, registration, signOut} from "../../service/API";
+import {getAllEventTypes, loginUser, registration, signOut} from "../../service/API";
 import Modal from "../../components/Modals/SingUpSignIn";
 import {useSnackbar} from "notistack";
 import {BuyEvent} from "../../service/Purchase";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {purchaseValidation} from "./Validtaion";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import {getId} from "../../service/EventTypes";
+import {useParams} from "react-router-dom";
+import {parseError} from "../../utils/Parser";
 
 export default function PurchasePage(props) {
+    let {dataId} = useParams();
     const {enqueueSnackbar} = useSnackbar();
-
-    useEffect(()=>{
+    const [eventTypes, setEventTypes] = useState([]);
+    useEffect(() => {
         const query = new URLSearchParams(props.location.search);
 
         const fromPaypal = query.get('success')
-        if (fromPaypal){
+        if (fromPaypal) {
+            BuyEvent(purchase,evento, setError, setPurchaseBtnLoading);
             enqueueSnackbar("La compra se realiza correctamente con PayPal", {
                 variant: 'success',
                 anchorOrigin: {
                     vertical: 'top',
                     horizontal: 'left',
                 },
+            })
+        }
+        if (eventTypes?.length === 0) {
+            getAllEventTypes().then((response) => {
+                const list = [];
+                response?.data?._embedded?.eventTypes?.forEach(value => {
+                    const event = {};
+                    event.id = getId(value);
+                    event.name = value?.name;
+                    event.amount = value?.amount;
+                    list.push(event);
+                });
+                setEventTypes(list);
+            }).catch(error => {
+                let err = parseError(error);
+                throw Error(err);
             })
         }
     }, [])
@@ -72,7 +88,7 @@ export default function PurchasePage(props) {
     if (loggedUser)
         loggedUser = JSON.parse(loggedUser);
 
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+    const [selectedDate, setSelectedDate] = React.useState(new Date());
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -80,7 +96,6 @@ export default function PurchasePage(props) {
 
     const [purchaseBtnLoading, setPurchaseBtnLoading] = React.useState(false)
     const onClickBuy = (event) => {
-
         event?.preventDefault();
         let error = purchaseValidation(purchase);
         if (error.trim() !== "") {
@@ -92,18 +107,18 @@ export default function PurchasePage(props) {
                 },
             })
         } else {
-            BuyEvent(purchase, setPurchaseBtnLoading);
+            BuyEvent(purchase,evento, setError, setPurchaseBtnLoading, enqueueSnackbar);
         }
     }
 
     const [purchase, setPurchase] = React.useState({
-        username: loggedUser? loggedUser?.username : "",
-        email: loggedUser? loggedUser?.email : "",
+        username: loggedUser ? loggedUser?.username : "",
+        email: loggedUser ? loggedUser?.email : "",
         comentarios: "",
         direccion: "",
         estado: "",
     })
-    const [evento, setEvento] = React.useState('');
+    const [evento, setEvento] = React.useState(dataId);
 
     const handleEventOnChange = (event) => {
         setEvento(event.target.value);
@@ -111,7 +126,7 @@ export default function PurchasePage(props) {
 
     const handleInputChange = (event) => {
         const {name, value} = event.target;
-        setPurchase({...purchase, [name]:value})
+        setPurchase({...purchase, [name]: value})
 
     }
 
@@ -199,7 +214,7 @@ export default function PurchasePage(props) {
         setError(null);
     }
 
-    const handlePaypal = () =>{
+    const handlePaypal = () => {
         let error = purchaseValidation(purchase);
         if (error.trim() !== "") {
             enqueueSnackbar(error, {
@@ -210,11 +225,11 @@ export default function PurchasePage(props) {
                 },
             })
         } else {
-            props.history.push('/paypal');
+            props.history.push(`/paypal/${evento}`);
         }
     }
 
-    return(
+    return (
         <div>
             <Sidebar
                 isOpen={isOpen}
@@ -235,75 +250,86 @@ export default function PurchasePage(props) {
                 isAdmin={isAdmin}
                 logoutBtnLoading={logoutBtnLoading}
             />
-        <Wrapper>
-            <h1>TEXT</h1>
-            <Box>
+            <Wrapper>
+                <h1>TEXT</h1>
+                <Box>
+                    <FlexRow>
+                        <VideocamIcon style={{width: "55px", height: "55px", marginRight: "10px", marginTop: "25px"}}
+                                      color={"primary"}/>
+                        <FormControl variant="outlined" style={{minWidth: 310, marginTop: "25px"}}>
+                            <InputLabel id="demo-simple-select-outlined-label">Evento</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-outlined-label"
+                                id="demo-simple-select-outlined"
+                                value={evento}
+                                onChange={handleEventOnChange}
+                                label="Evento">
+                                {eventTypes?.map(value => {
+                                    return (
+                                        <MenuItem key={value?.id} value={value?.id}>{value?.name}</MenuItem>
+                                    );
+                                })}
+                            </Select>
+
+                        </FormControl>
+                    </FlexRow>
+                    <FlexRow style={{marginTop: "55px"}}>
+                        <PersonIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}}
+                                    color={"primary"}/>
+                        <TextField label="Nombre de usario" name="username" onChange={handleInputChange}
+                                   value={purchase.username} type="text" variant="outlined"/>
+
+                        <ChatBubbleIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}}
+                                        color={"primary"}/>
+                        <TextField label="Comentarios" value={purchase.comentarios} name="comentarios"
+                                   onChange={handleInputChange} type="text" variant="outlined"/>
+
+                        <MailIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}}
+                                  color={"primary"}/>
+                        <TextField label="Correo electrónico" value={purchase.email} name="email"
+                                   onChange={handleInputChange} type="text" variant="outlined"/>
+                    </FlexRow>
+                    <FlexRow style={{marginTop: "55px"}}>
+                        <LocationCityIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}}
+                                          color={"primary"}/>
+                        <TextField label="Estado" value={purchase.estado} name="estado" onChange={handleInputChange}
+                                   type="text" variant="outlined"/>
+
+
+                        <HomeIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}}
+                                  color={"primary"}/>
+                        <TextField label="La dirección" value={purchase.direccion} name="direccion"
+                                   onChange={handleInputChange} type="text" variant="outlined"/>
+
+                    </FlexRow>
+                    <FlexRow style={{marginTop: "55px"}}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                margin="normal"
+                                id="date-picker-dialog"
+                                label="Date picker dialog"
+                                format="MM/dd/yyyy"
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </FlexRow>
+                </Box>
                 <FlexRow>
-                    <VideocamIcon style={{width: "55px", height: "55px", marginRight: "10px", marginTop: "25px"}} color={"primary"} />
-                <FormControl variant="outlined" style={{minWidth: 310, marginTop: "25px"}}>
-                    <InputLabel id="demo-simple-select-outlined-label">Evento</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={evento}
-                        onChange={handleEventOnChange}
-                        label="Evento"
-                    >
-                        <MenuItem value={'pre-boda'}>PRE-BODA</MenuItem>
-                        <MenuItem value={'boda'}>BODA</MenuItem>
-                        <MenuItem value={'cumpleano'}>CUMPLEANO</MenuItem>
-                        <MenuItem value={'video-de-evento'}>VIDEO DE EVENTO</MenuItem>
-                    </Select>
-
-                </FormControl>
+                    <img src={PayPal} style={{width: "60px", marginRight: "10px"}} alt="paypal"/>
+                    <Button variant="contained" color="default" onClick={handlePaypal}>Conectar paypal
+                    </Button>
                 </FlexRow>
-                <FlexRow style={{marginTop: "55px"}}>
-                <PersonIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField label="Nombre de usario" name="username" onChange={handleInputChange} value={purchase.username} type="text" variant="outlined" />
-
-                <ChatBubbleIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField label="Comentarios" value={purchase.comentarios} name="comentarios" onChange={handleInputChange} type="text" variant="outlined" />
-
-                <MailIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField label="Correo electrónico" value={purchase.email} name="email" onChange={handleInputChange} type="text" variant="outlined" />
-            </FlexRow>
-                <FlexRow style={{marginTop: "55px"}}>
-                <LocationCityIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField label="Estado" value={purchase.estado} name="estado" onChange={handleInputChange} type="text" variant="outlined" />
-
-
-                <HomeIcon style={{minWidth: 100, width: "55px", height: "55px", marginRight: "10px"}} color={"primary"} />
-                <TextField label="La dirección" value={purchase.direccion} name="direccion" onChange={handleInputChange} type="text" variant="outlined" />
-
-            </FlexRow>
-                <FlexRow style={{marginTop: "55px"}}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        margin="normal"
-                        id="date-picker-dialog"
-                        label="Date picker dialog"
-                        format="MM/dd/yyyy"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                    </MuiPickersUtilsProvider>
+                <FlexRow style={{marginTop: "25px"}}>
+                    {/* <img style={{width: "40px", height: "40px", margintRight: "10px"}} src={PayPal} /> */}
+                    <Button variant="contained" color="primary" onClick={onClickBuy}>
+                        {purchaseBtnLoading ? <CircularProgress/> : "Comprar"}
+                    </Button>
                 </FlexRow>
-            </Box>
-            <FlexRow>
-                <img src={PayPal} style={{width: "60px", marginRight: "10px"}}/>
-                <Button variant="contained" color="default" onClick={handlePaypal}>Conectar paypal
-                </Button>
-            </FlexRow>
-            <FlexRow style={{marginTop: "25px"}}>
-                {/* <img style={{width: "40px", height: "40px", margintRight: "10px"}} src={PayPal} /> */}
-                <Button variant="contained" color="primary" onClick={onClickBuy}>
-                    {purchaseBtnLoading? <CircularProgress />: "Comprar"}
-                </Button>
-            </FlexRow>
-        </Wrapper>
+            </Wrapper>
             <Modal
                 showModal={showModal}
                 handleCloseModal={handleCloseModal}

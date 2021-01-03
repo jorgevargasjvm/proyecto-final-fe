@@ -8,12 +8,12 @@ import PurchasePage from "../pages/Purchase";
 import PaypalPage from "../pages/Paypal";
 
 export default function Router() {
-    const {isAuthenticated, user, isAdmin} = useUserState();
+    const {isAuthenticated, isAdmin} = useUserState();
     return (
         <BrowserRouter>
             <Switch>
                 <Route exact path={ADMIN} render={() => <Redirect to={STATISTICS}/>}/>
-                <PublicRoute exact path={PURCHASE} component={PurchasePage} />
+                <PublicRoute path={PURCHASE} component={PurchasePage} />
                 <PublicRoute exact path={PAYPAL} component={PaypalPage} />
                 <PrivateRoute path={ADMIN} component={Layout}/>
                 <PublicRoute path={ROOT} component={HomePage}/>
