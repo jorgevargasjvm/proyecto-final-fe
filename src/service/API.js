@@ -31,7 +31,8 @@ export function signOut(dispatch, history, setLogoutBtnLoading) {
     localStorage.removeItem("is_admin");
     dispatch({type: "SIGN_OUT_SUCCESS"});
     history.push(ROOT);
-    setLogoutBtnLoading(false);
+    if(setLogoutBtnLoading)
+        setLogoutBtnLoading(false);
 }
 
 export async function registration(dispatch, user, history, setIsLoading, setError) {

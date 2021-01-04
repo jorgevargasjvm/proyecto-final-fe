@@ -134,7 +134,7 @@ export default function DashboardPage(props) {
                 </Grid>
                 <Grid item lg={3} md={4} sm={6} xs={12}>
                     <Widget
-                        title="Visits Today"
+                        title="Visitas hoy"
                         upperTitle
                         bodyClass={classes.fullHeightBody}
                         className={classes.card}
@@ -177,13 +177,13 @@ export default function DashboardPage(props) {
                         >
                             <Grid item xs={4}>
                                 <Typography color="text" colorBrightness="secondary" noWrap>
-                                    Registrations
+                                    Inscripciones
                                 </Typography>
                                 <Typography size="md">860</Typography>
                             </Grid>
                             <Grid item xs={4}>
                                 <Typography color="text" colorBrightness="secondary" noWrap>
-                                    Sign Out
+                                    Desconectar
                                 </Typography>
                                 <Typography size="md">32</Typography>
                             </Grid>
@@ -198,7 +198,8 @@ export default function DashboardPage(props) {
                 </Grid>
                 <Grid item lg={3} md={8} sm={6} xs={12}>
                     <Widget
-                        title="App Performance"
+                        title="
+Rendimiento de la aplicación"
                         upperTitle
                         className={classes.card}
                         bodyClass={classes.fullHeightBody}
@@ -211,7 +212,7 @@ export default function DashboardPage(props) {
                                     colorBrightness="secondary"
                                     className={classes.legendElementText}
                                 >
-                                    Integration
+                                    Integración
                                 </Typography>
                             </div>
                             <div className={classes.legendElement}>
@@ -261,7 +262,7 @@ export default function DashboardPage(props) {
                 </Grid>
                 <Grid item lg={3} md={8} sm={6} xs={12}>
                     <AllProducts
-                        title="ALL PRODUCTS"
+                        title="Compra total"
                         profit="true"
                         profitValue={3.7}
                         total={selectedEvents?.length}
@@ -293,7 +294,7 @@ export default function DashboardPage(props) {
                 </Grid>
                 <Grid item md={4} sm={6} xs={12}>
                     <AllProducts
-                        title="Pre-Boda"
+                        title="Video de evento"
                         profit={false}
                         profitValue={2.1}
                         total={filterByCategory(selectedEvents, "Video de Evento")?.length}
@@ -309,7 +310,7 @@ export default function DashboardPage(props) {
                                     color="text"
                                     colorBrightness="secondary"
                                 >
-                                    Daily Line Chart
+                                    Ganancias
                                 </Typography>
                             </div>
                         }
