@@ -1,90 +1,27 @@
-import {getAllEventsSync} from "../API";
-import {parseError} from "../../utils/Parser";
 import moment from "moment";
 
-export function numberOfSales() {
-    return {
-        daily: allEventsToday()?.length,
-        weekly: allEventsPastWeek()?.length,
-        monthly: allEventsPastMonth()?.length,
-        year: allEventsPastYear()?.length,
-    };
-}
-
-export function todayStatistics() {
-    return allEventsToday();
-}
-
-export function pastWeekStatistics() {
-    return allEventsPastWeek();
-}
-
-export function pastMonthStatistics() {
-    return allEventsPastMonth();
+export function filterByCategory(eventList, category) {
+    return eventList?.filter(event => event?.tipoEvento?.name === category);
 }
 
 export function pastYearStatistics() {
     return allEventsPastYear();
 }
 
-function allEventsPastYear() {
-    let events = [];
-    getAllEventsSync().then(response => {
-        response?.data.forEach(event => {
-            if (inPastYear(event?.fechaHora)) {
-                events.push(event);
-            }
-        });
-    }).catch(error => {
-        let err = parseError(error);
-        throw new Error(err);
-    })
-    return events;
+export function allEventsPastYear(eventList) {
+    return eventList.filter(event => inPastYear(event?.fechaHora));
 }
 
-function allEventsPastMonth() {
-    let events = [];
-    getAllEventsSync().then(response => {
-        response?.data.forEach(event => {
-            if (inPastMonth(event?.fechaHora)) {
-                events.push(event);
-            }
-        });
-    }).catch(error => {
-        let err = parseError(error);
-        throw new Error(err);
-    })
-    return events;
+export function allEventsPastMonth(eventList) {
+    return eventList.filter(event => inPastMonth(event?.fechaHora));
 }
 
-function allEventsPastWeek() {
-    let events = [];
-    getAllEventsSync().then(response => {
-        response?.data.forEach(event => {
-            if (inPastWeek(event?.fechaHora)) {
-                events.push(event);
-            }
-        });
-    }).catch(error => {
-        let err = parseError(error);
-        throw new Error(err);
-    })
-    return events;
+export function allEventsPastWeek(eventList) {
+    return eventList.filter(event => inPastWeek(event?.fechaHora));
 }
 
-function allEventsToday() {
-    let events = [];
-    getAllEventsSync().then(response => {
-        response?.data.forEach(event => {
-            if (isToday(event?.fechaHora)) {
-                events.push(event);
-            }
-        });
-    }).catch(error => {
-        let err = parseError(error);
-        throw new Error(err);
-    })
-    return events;
+export function allEventsToday(eventList) {
+    return eventList.filter(event => isToday(event?.fechaHora));
 }
 
 function isToday(dateForParse) {

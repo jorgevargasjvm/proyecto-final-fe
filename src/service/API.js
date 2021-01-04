@@ -120,3 +120,7 @@ export async function editNotifications(notifications) {
 export async function deleteNotifications(notificationId) {
     return axios(`http://3.93.68.19:8003/notifications/${notificationId}`, {method: "DELETE"})
 }
+
+export async function getPendingRequests() {
+    return axios("http://3.93.68.19:8002/events-pending");
+}

@@ -1,20 +1,25 @@
 import React, {useEffect, useState} from "react";
 import {Grid, LinearProgress} from "@material-ui/core";
 import {useTheme} from "@material-ui/styles";
-import {Line, LineChart,} from "recharts";
-
-// styles
 import useStyles from "./styles";
-
-// components
-import mock from "./mock";
 import Widget from "../../../components/Admin/Widget";
 import PageTitle from "../../../components/PageTitle";
 import {Typography} from "../../../components/Admin/Wrappers";
 import {LargeDot} from "../../../components/Dot";
-import BigStat from "./components/BigStat/BigStat";
 import AllProducts from "./components/AllProducts";
-import {numberOfSales} from "../../../service/Statistics";
+import {
+    allEventsPastMonth,
+    allEventsPastWeek,
+    allEventsPastYear,
+    allEventsToday,
+    filterByCategory
+} from "../../../service/Statistics";
+import {deleteEvent, getAllEventsSync, getPendingRequests} from "../../../service/API";
+import {parseError} from "../../../utils/Parser";
+import OnlyDeleteTable from "../../../components/Tables/OnlyDeleteTable";
+import {useSnackbar} from "notistack";
+import {columns} from "./components/table/columns";
+import {Area, ComposedChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis} from "recharts";
 
 const TABS = {
     today: 0,
@@ -23,30 +28,110 @@ const TABS = {
     year: 3
 };
 
+const mainChartData = getMainChartData();
+
+const options = {
+    exportButton: true,
+    actionsColumnIndex: -1,
+    emptyRowsWhenPaging: false,
+    draggable: false
+}
+
 export default function DashboardPage(props) {
+    const {enqueueSnackbar} = useSnackbar();
     const [selectedTab, setSelectedTab] = useState(TABS.today);
-    const [todayEvents, setTodayEvents] = useState();
-    const [allSales, setAllSales] = useState(null);
-    const [pastWeekEvents, setPastWeekEvents] = useState();
-    const [pastMonthEvents, setPastMonthEvents] = useState();
-    const [pastYearEvents, setPastYearEvents] = useState();
+    const [eventList, setEventList] = useState(null);
+    const [loading, setLoading] = React.useState(true);
+    const [pendingRequests, setPendingRequests] = useState([]);
+    const [selectedEvents, setSelectedEvents] = useState(null);
     const classes = useStyles();
     const theme = useTheme();
 
     useEffect(() => {
-        if (allSales === null) {
-            setAllSales(numberOfSales);
+        if (eventList === null) {
+            getAllEventsSync().then(response => {
+                let events = response?.data;
+                setEventList(events);
+                setSelectedEvents(allEventsToday(events));
+            }).catch(error => {
+                let err = parseError(error);
+                throw new Error(err);
+            })
+        }
+        if (pendingRequests?.length === 0) {
+            getPendingRequests().then(response => {
+                setPendingRequests(response?.data);
+                setLoading(false);
+            }).catch(error => {
+                let err = parseError(error);
+                enqueueSnackbar(err, {
+                    variant: 'error',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                    },
+                });
+                setLoading(false);
+            })
         }
     }, [])
-    console.log("allSales", allSales);
 
     const handleChangeTab = (event, newValue) => {
         setSelectedTab(newValue);
+        switch (newValue) {
+            case TABS.today:
+                setSelectedEvents(allEventsToday(eventList));
+                break;
+            case TABS.week:
+                setSelectedEvents(allEventsPastWeek(eventList));
+                break;
+            case TABS.month:
+                setSelectedEvents(allEventsPastMonth(eventList));
+                break;
+            case TABS.year:
+                setSelectedEvents(allEventsPastYear(eventList));
+                break
+            default:
+                setSelectedEvents(0);
+                break;
+        }
     }
+    const cols = columns();
+
+    const handleRemoveEvent = (oldData, resolve, reject) => {
+        deleteEvent(oldData?.id).then(response => {
+            const dataDelete = [...eventList];
+            const index = oldData.tableData.id;
+            dataDelete.splice(index, 1);
+            setEventList([...dataDelete]);
+            if (resolve)
+                resolve();
+        }).catch(error => {
+            let err = parseError(error);
+            enqueueSnackbar(err, {
+                variant: 'error',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                },
+            });
+            reject();
+        });
+    };
     return (
         <>
             <PageTitle title="Index" showTabs={true} handleChangeTab={handleChangeTab} selectedTab={selectedTab}/>
             <Grid container spacing={4}>
+                <Grid item xs={12}>
+                    <OnlyDeleteTable
+                        title="PENDING REQUEST"
+                        data={pendingRequests}
+                        columns={cols}
+                        isLoading={loading}
+                        options={options}
+                        handleTableDelete={handleRemoveEvent}
+                    />
+                </Grid>
                 <Grid item lg={3} md={4} sm={6} xs={12}>
                     <Widget
                         title="Visits Today"
@@ -177,16 +262,105 @@ export default function DashboardPage(props) {
                 <Grid item lg={3} md={8} sm={6} xs={12}>
                     <AllProducts
                         title="ALL PRODUCTS"
-                        total={{
-                            ...allSales,
-                            percent: {value: 3.7, profit: false}
-                        }}/>
+                        profit="true"
+                        profitValue={3.7}
+                        total={selectedEvents?.length}
+                    />
                 </Grid>
-                {mock.bigStat.map(stat => (
-                    <Grid item md={4} sm={6} xs={12} key={stat.product}>
-                        <BigStat {...stat} />
-                    </Grid>
-                ))}
+                <Grid item md={4} sm={6} xs={12}>
+                    <AllProducts
+                        title="Pre-Boda"
+                        profit={false}
+                        profitValue={2.1}
+                        total={filterByCategory(selectedEvents, "Pre-Boda")?.length}
+                    />
+                </Grid>
+                <Grid item md={4} sm={6} xs={12}>
+                    <AllProducts
+                        title="Boda"
+                        profit={false}
+                        profitValue={2.1}
+                        total={filterByCategory(selectedEvents, "Boda")?.length}
+                    />
+                </Grid>
+                <Grid item md={4} sm={6} xs={12}>
+                    <AllProducts
+                        title="Cumpleaños"
+                        profit={false}
+                        profitValue={2.1}
+                        total={filterByCategory(selectedEvents, "Cumpleaños")?.length}
+                    />
+                </Grid>
+                <Grid item md={4} sm={6} xs={12}>
+                    <AllProducts
+                        title="Pre-Boda"
+                        profit={false}
+                        profitValue={2.1}
+                        total={filterByCategory(selectedEvents, "Video de Evento")?.length}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Widget
+                        bodyClass={classes.mainChartBody}
+                        header={
+                            <div className={classes.mainChartHeader}>
+                                <Typography
+                                    variant="h5"
+                                    color="text"
+                                    colorBrightness="secondary"
+                                >
+                                    Daily Line Chart
+                                </Typography>
+                            </div>
+                        }
+                    >
+                        <ResponsiveContainer width="100%" minWidth={500} height={350}>
+                            <ComposedChart
+                                margin={{top: 0, right: -15, left: -15, bottom: 0}}
+                                data={mainChartData}
+                            >
+                                <YAxis
+                                    ticks={[0, 2500, 5000, 7500]}
+                                    tick={{fill: theme.palette.text.hint + "80", fontSize: 14}}
+                                    stroke={theme.palette.text.hint + "80"}
+                                    tickLine={false}
+                                />
+                                <XAxis
+                                    tickFormatter={i => i + 1}
+                                    tick={{fill: theme.palette.text.hint + "80", fontSize: 14}}
+                                    stroke={theme.palette.text.hint + "80"}
+                                    tickLine={false}
+                                />
+                                <Area
+                                    type="natural"
+                                    dataKey="desktop"
+                                    fill={theme.palette.background.light}
+                                    strokeWidth={0}
+                                    activeDot={false}
+                                />
+                                <Line
+                                    type="natural"
+                                    dataKey="mobile"
+                                    stroke={theme.palette.primary.main}
+                                    strokeWidth={2}
+                                    dot={false}
+                                    activeDot={false}
+                                />
+                                <Line
+                                    type="linear"
+                                    dataKey="tablet"
+                                    stroke={theme.palette.warning.main}
+                                    strokeWidth={2}
+                                    dot={{
+                                        stroke: theme.palette.warning.dark,
+                                        strokeWidth: 2,
+                                        fill: theme.palette.warning.main,
+                                    }}
+                                />
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </Widget>
+                </Grid>
             </Grid>
         </>
     );
