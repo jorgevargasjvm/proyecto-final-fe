@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {FlexRow} from "../../components/Flex";
 import PersonIcon from '@material-ui/icons/Person';
 import MailIcon from '@material-ui/icons/Mail';
@@ -17,11 +17,11 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import PayPal from '../../assets/images/pp.png'
+import PayPall from '../../assets/images/pp.png'
 import {useUserDispatch, useUserState} from "../../context/UserContext";
 import {animateScroll as scroll} from "react-scroll";
 import {loginFormValidation, registrationFormValidation} from "../Home/Validation";
-import {getAllEventTypes, loginUser, registration, signOut} from "../../service/API";
+import {getAllEventTypes, getPayment, loginUser, registration, signOut} from "../../service/API";
 import Modal from "../../components/Modals/SingUpSignIn";
 import {useSnackbar} from "notistack";
 import {BuyEvent} from "../../service/Purchase";
@@ -31,6 +31,9 @@ import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {getId} from "../../service/EventTypes";
 import {useParams} from "react-router-dom";
 import {parseError} from "../../utils/Parser";
+import PaymentPage from "../Payment";
+import {PAYMENT} from "../../routes/paths";
+import PayPal from '../../components/PayPal'
 
 export default function PurchasePage(props) {
     let {dataId} = useParams();
@@ -67,15 +70,16 @@ export default function PurchasePage(props) {
             })
         }
     }, [])
+    const [checkout, setCheckout] = useState(false);
     const userDispatch = useUserDispatch();
-    const wrapperRef = React.useRef(null);
+    const wrapperRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
     const [error, setError] = useState(null);
     const [registrationButtonLoading, setRegistrationButtonLoading] = useState(false);
     const [loginButtonLoading, setLoginButtonLoading] = useState(false);
     const [logoutBtnLoading, setLogoutBtnLoading] = useState(false);
     const [showModal, setShowModal] = useState(false)
-    const [currentView, setCurrentView] = React.useState("signUp")
+    const [currentView, setCurrentView] = useState("signUp")
     const [user, setUser] = useState({
         name: "",
         username: "",
@@ -215,7 +219,8 @@ export default function PurchasePage(props) {
     }
 
     const handlePaypal = () => {
-        let error = purchaseValidation(purchase);
+       props.history.push(PAYMENT)
+        /*let error = purchaseValidation(purchase);
         if (error.trim() !== "") {
             enqueueSnackbar(error, {
                 variant: 'error',
@@ -226,9 +231,13 @@ export default function PurchasePage(props) {
             })
         } else {
             props.history.push(`/paypal/${evento}`);
-        }
+        }*/
     }
-
+    if (checkout === true){
+       return( <div className="payment-div">
+            <PayPal />
+        </div>)
+    }
     return (
         <div>
             <Sidebar
@@ -318,8 +327,18 @@ export default function PurchasePage(props) {
                         </MuiPickersUtilsProvider>
                     </FlexRow>
                 </Box>
-                    <img src={PayPal} style={{width: "60px"}} alt="paypal"/>
-                <Button variant="contained" color="primary" onClick={handlePaypal}>Pagar</Button>
+                {(checkout === true)
+                    ? <div className="payment-div">
+                        <PayPal />
+                    </div>
+
+                    :<div>
+                        <h1>React-PayPal</h1>
+                        <button onClick={() => {setCheckout(true)}} className="checkout-button">Checkout</button>
+                    </div>
+                }
+                {/*<img src={PayPal} style={{width: "60px"}} alt="paypal"/>
+                <Button variant="contained" color="primary" onClick={handlePaypal}>Pagar</Button>*/}
             </Wrapper>
             <Modal
                 showModal={showModal}

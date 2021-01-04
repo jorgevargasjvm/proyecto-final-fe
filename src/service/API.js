@@ -25,13 +25,13 @@ export function loginUser(dispatch, username, password, history, setIsLoading, s
 }
 
 export function signOut(dispatch, history, setLogoutBtnLoading) {
-    if (setLogoutBtnLoading)
+    if(setLogoutBtnLoading)
         setLogoutBtnLoading(true);
     localStorage.removeItem("loggedUser");
     localStorage.removeItem("is_admin");
     dispatch({type: "SIGN_OUT_SUCCESS"});
     history.push(ROOT);
-    if (setLogoutBtnLoading)
+    if(setLogoutBtnLoading)
         setLogoutBtnLoading(false);
 }
 
@@ -125,4 +125,8 @@ export async function deleteNotifications(notificationId) {
 
 export async function getPendingRequests() {
     return axios("http://3.93.68.19:8002/events-pending");
+}
+
+export async function getPayment() {
+    return axios("http://3.93.68.19:8002/payment")
 }
