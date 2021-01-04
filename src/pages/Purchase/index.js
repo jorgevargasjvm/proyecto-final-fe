@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {FlexRow} from "../../components/Flex";
 import PersonIcon from '@material-ui/icons/Person';
 import MailIcon from '@material-ui/icons/Mail';
@@ -11,40 +11,63 @@ import Navbar from "../../components/Navbar";
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import PayPall from '../../assets/images/pp.png'
 import {useUserDispatch, useUserState} from "../../context/UserContext";
 import {animateScroll as scroll} from "react-scroll";
 import {loginFormValidation, registrationFormValidation} from "../Home/Validation";
-import {getAllEventTypes, getPayment, loginUser, registration, signOut} from "../../service/API";
+import {getAllEventTypes, loginUser, registration, signOut} from "../../service/API";
 import Modal from "../../components/Modals/SingUpSignIn";
 import {useSnackbar} from "notistack";
 import {BuyEvent} from "../../service/Purchase";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import {purchaseValidation} from "./Validtaion";
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import {getId} from "../../service/EventTypes";
 import {useParams} from "react-router-dom";
 import {parseError} from "../../utils/Parser";
-import PaymentPage from "../Payment";
-import {PAYMENT} from "../../routes/paths";
-import PayPal from '../../components/PayPal'
 
 export default function PurchasePage(props) {
     let {dataId} = useParams();
+    let {loggedUser, isAdmin} = useUserState();
+    if (loggedUser)
+        loggedUser = JSON.parse(loggedUser);
+    const userDispatch = useUserDispatch();
+    const wrapperRef = useRef(null);
+    const paypalRef = React.useRef();
+
+    const [paid, setPaid] = useState(false);
     const {enqueueSnackbar} = useSnackbar();
     const [eventTypes, setEventTypes] = useState([]);
-    useEffect(() => {
-        const query = new URLSearchParams(props.location.search);
+    const [isOpen, setIsOpen] = useState(false);
+    const [error, setError] = useState(null);
+    const [registrationButtonLoading, setRegistrationButtonLoading] = useState(false);
+    const [loginButtonLoading, setLoginButtonLoading] = useState(false);
+    const [logoutBtnLoading, setLogoutBtnLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false)
+    const [currentView, setCurrentView] = useState("signUp")
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [purchaseBtnLoading, setPurchaseBtnLoading] = useState(false)
+    const [purchase, setPurchase] = useState({
+        username: loggedUser ? loggedUser?.username : "",
+        email: loggedUser ? loggedUser?.email : "",
+        comentarios: "",
+        direccion: "",
+        estado: "",
+    })
+    const [evento, setEvento] = useState(null);
+    const [user, setUser] = useState({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        rePassword: ""
+    });
 
-        const fromPaypal = query.get('success')
-        if (fromPaypal) {
-            BuyEvent(purchase,evento, setError, setPurchaseBtnLoading);
+    useEffect(() => {
+        if (paid) {
+            BuyEvent(purchase, evento, setError, setPurchaseBtnLoading);
             enqueueSnackbar("La compra se realiza correctamente con PayPal", {
                 variant: 'success',
                 anchorOrigin: {
@@ -58,74 +81,31 @@ export default function PurchasePage(props) {
                 const list = [];
                 response?.data?._embedded?.eventTypes?.forEach(value => {
                     const event = {};
-                    event.id = getId(value);
+                    let id = parseInt(getId(value));
+                    event.id = id;
                     event.name = value?.name;
                     event.amount = value?.amount;
+                    if (id === parseInt(dataId)) {
+                        setEvento(event);
+                        reRenderPayPal(event, paypalRef, setPaid);
+                    }
                     list.push(event);
                 });
                 setEventTypes(list);
             }).catch(error => {
                 let err = parseError(error);
-                throw Error(err);
+                setError(err);
             })
         }
     }, [])
-    const [checkout, setCheckout] = useState(false);
-    const userDispatch = useUserDispatch();
-    const wrapperRef = useRef(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [error, setError] = useState(null);
-    const [registrationButtonLoading, setRegistrationButtonLoading] = useState(false);
-    const [loginButtonLoading, setLoginButtonLoading] = useState(false);
-    const [logoutBtnLoading, setLogoutBtnLoading] = useState(false);
-    const [showModal, setShowModal] = useState(false)
-    const [currentView, setCurrentView] = useState("signUp")
-    const [user, setUser] = useState({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        rePassword: ""
-    });
-
-    let {loggedUser, isAdmin} = useUserState();
-    if (loggedUser)
-        loggedUser = JSON.parse(loggedUser);
-
-    const [selectedDate, setSelectedDate] = React.useState(new Date());
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
 
-    const [purchaseBtnLoading, setPurchaseBtnLoading] = React.useState(false)
-    const onClickBuy = (event) => {
-        event?.preventDefault();
-        let error = purchaseValidation(purchase);
-        if (error.trim() !== "") {
-            enqueueSnackbar(error, {
-                variant: 'error',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'left',
-                },
-            })
-        } else {
-            BuyEvent(purchase,evento, setError, setPurchaseBtnLoading, enqueueSnackbar);
-        }
-    }
-
-    const [purchase, setPurchase] = React.useState({
-        username: loggedUser ? loggedUser?.username : "",
-        email: loggedUser ? loggedUser?.email : "",
-        comentarios: "",
-        direccion: "",
-        estado: "",
-    })
-    const [evento, setEvento] = React.useState(dataId);
-
     const handleEventOnChange = (event) => {
-        setEvento(event.target.value);
+        setEvento(eventTypes.filter(value => value?.id === event.target.value)[0]);
+        reRenderPayPal(eventTypes.filter(value => value?.id === event.target.value)[0], paypalRef, setPaid);
     };
 
     const handleInputChange = (event) => {
@@ -217,27 +197,6 @@ export default function PurchasePage(props) {
         })
         setError(null);
     }
-
-    const handlePaypal = () => {
-       props.history.push(PAYMENT)
-        /*let error = purchaseValidation(purchase);
-        if (error.trim() !== "") {
-            enqueueSnackbar(error, {
-                variant: 'error',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'left',
-                },
-            })
-        } else {
-            props.history.push(`/paypal/${evento}`);
-        }*/
-    }
-    if (checkout === true){
-       return( <div className="payment-div">
-            <PayPal />
-        </div>)
-    }
     return (
         <div>
             <Sidebar
@@ -266,11 +225,9 @@ export default function PurchasePage(props) {
                         <VideocamIcon style={{width: "55px", height: "55px", marginRight: "10px", marginTop: "25px"}}
                                       color={"primary"}/>
                         <FormControl variant="outlined" style={{minWidth: 310, marginTop: "25px"}}>
-                            <InputLabel id="demo-simple-select-outlined-label">Evento</InputLabel>
+                            <InputLabel>Evento</InputLabel>
                             <Select
-                                labelId="demo-simple-select-outlined-label"
-                                id="demo-simple-select-outlined"
-                                value={evento}
+                                value={evento?.id ?? ""}
                                 onChange={handleEventOnChange}
                                 label="Evento">
                                 {eventTypes?.map(value => {
@@ -327,18 +284,10 @@ export default function PurchasePage(props) {
                         </MuiPickersUtilsProvider>
                     </FlexRow>
                 </Box>
-                {(checkout === true)
-                    ? <div className="payment-div">
-                        <PayPal />
-                    </div>
-
-                    :<div>
-                        <h1>React-PayPal</h1>
-                        <button onClick={() => {setCheckout(true)}} className="checkout-button">Checkout</button>
-                    </div>
-                }
-                {/*<img src={PayPal} style={{width: "60px"}} alt="paypal"/>
-                <Button variant="contained" color="primary" onClick={handlePaypal}>Pagar</Button>*/}
+                <div>
+                    <h4>La cantidad total es EUR : {evento?.amount}</h4>
+                    <div ref={paypalRef}/>
+                </div>
             </Wrapper>
             <Modal
                 showModal={showModal}
@@ -354,4 +303,37 @@ export default function PurchasePage(props) {
                 wrapperRef={wrapperRef}/>
         </div>
     )
+}
+
+function reRenderPayPal(evento, paypalRef, setPaid) {
+    if (paypalRef?.current.children[0]) {
+        paypalRef.current.children[0].innerHTML = "";
+    }
+    window.paypal
+        .Buttons({
+            createOrder: (data, actions) => {
+                return actions.order.create({
+                    intent: "CAPTURE",
+                    purchase_units: [
+                        {
+                            description: `Tu orden es: ${evento?.name}`,
+                            amount: {
+                                currency_code: "EUR",
+                                value: evento?.amount,
+                            },
+                        },
+                    ],
+                });
+            },
+            onApprove: async (data, actions) => {
+                const order = await actions.order.capture();
+                setPaid(true);
+                console.log(order);
+            },
+            onError: (err) => {
+                //   setError(err),
+                console.error(err);
+            },
+        })
+        .render(paypalRef.current);
 }
