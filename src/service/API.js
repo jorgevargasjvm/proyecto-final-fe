@@ -25,7 +25,8 @@ export function loginUser(dispatch, username, password, history, setIsLoading, s
 }
 
 export function signOut(dispatch, history, setLogoutBtnLoading) {
-    setLogoutBtnLoading(true);
+    if(setLogoutBtnLoading)
+        setLogoutBtnLoading(true);
     localStorage.removeItem("loggedUser");
     localStorage.removeItem("is_admin");
     dispatch({type: "SIGN_OUT_SUCCESS"});
