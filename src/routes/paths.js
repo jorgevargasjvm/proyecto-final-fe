@@ -6,3 +6,4 @@ export const NOTIFICATIONS = ADMIN +"/notifications";
 export const EVENTS = ADMIN +"/events";
 export const PURCHASE = "/purchase/:dataId";
 export const PAYPAL = "/paypal/:dataId";
+export const PAYMENT = "/payment";

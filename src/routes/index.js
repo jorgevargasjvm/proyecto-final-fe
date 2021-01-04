@@ -2,10 +2,11 @@ import React from "react";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import Layout from "../components/Admin/Layout";
 import {useUserState} from "../context/UserContext";
-import {ADMIN, PAYPAL, PURCHASE, ROOT, STATISTICS} from "./paths";
+import {ADMIN, PAYMENT, PAYPAL, PURCHASE, ROOT, STATISTICS} from "./paths";
 import HomePage from "../pages/Home";
 import PurchasePage from "../pages/Purchase";
 import PaypalPage from "../pages/Paypal";
+import PaymentPage from "../pages/Payment";
 
 export default function Router() {
     const {isAuthenticated, isAdmin} = useUserState();
@@ -14,6 +15,7 @@ export default function Router() {
             <Switch>
                 <Route exact path={ADMIN} render={() => <Redirect to={STATISTICS}/>}/>
                 <PublicRoute path={PURCHASE} component={PurchasePage} />
+                <PublicRoute path={PAYMENT} component={PaymentPage} />
                 <PublicRoute exact path={PAYPAL} component={PaypalPage} />
                 <PrivateRoute path={ADMIN} component={Layout}/>
                 <PublicRoute path={ROOT} component={HomePage}/>

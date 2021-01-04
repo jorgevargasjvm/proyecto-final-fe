@@ -126,3 +126,7 @@ export async function deleteNotifications(notificationId) {
 export async function getPendingRequests() {
     return axios("http://3.93.68.19:8002/events-pending");
 }
+
+export async function getPayment() {
+    return axios("http://3.93.68.19:8002/payment")
+}

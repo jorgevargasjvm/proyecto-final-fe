@@ -18,10 +18,10 @@ export default function PageTitle({title, selectedTab, handleChangeTab, showTabs
                     onChange={handleChangeTab}
                     aria-label="disabled tabs example"
                 >
-                    <Tab label="Today"/>
-                    <Tab label="This week"/>
-                    <Tab label="This month"/>
-                    <Tab label="This year"/>
+                    <Tab label="Hoy"/>
+                    <Tab label="Esta semana"/>
+                    <Tab label="Este mes"/>
+                    <Tab label="Este año"/>
                 </Tabs>
             </TabHeaderContainer> : <></>}
         </PageTitleContainer>
