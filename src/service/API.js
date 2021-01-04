@@ -25,13 +25,14 @@ export function loginUser(dispatch, username, password, history, setIsLoading, s
 }
 
 export function signOut(dispatch, history, setLogoutBtnLoading) {
-    if(setLogoutBtnLoading)
+    if (setLogoutBtnLoading)
         setLogoutBtnLoading(true);
     localStorage.removeItem("loggedUser");
     localStorage.removeItem("is_admin");
     dispatch({type: "SIGN_OUT_SUCCESS"});
     history.push(ROOT);
-    setLogoutBtnLoading(false);
+    if (setLogoutBtnLoading)
+        setLogoutBtnLoading(false);
 }
 
 export async function registration(dispatch, user, history, setIsLoading, setError) {
