@@ -318,17 +318,8 @@ export default function PurchasePage(props) {
                         </MuiPickersUtilsProvider>
                     </FlexRow>
                 </Box>
-                <FlexRow>
-                    <img src={PayPal} style={{width: "60px", marginRight: "10px"}} alt="paypal"/>
-                    <Button variant="contained" color="default" onClick={handlePaypal}>Conectar paypal
-                    </Button>
-                </FlexRow>
-                <FlexRow style={{marginTop: "25px"}}>
-                    {/* <img style={{width: "40px", height: "40px", margintRight: "10px"}} src={PayPal} /> */}
-                    <Button variant="contained" color="primary" onClick={onClickBuy}>
-                        {purchaseBtnLoading ? <CircularProgress/> : "Comprar"}
-                    </Button>
-                </FlexRow>
+                    <img src={PayPal} style={{width: "60px"}} alt="paypal"/>
+                <Button variant="contained" color="primary" onClick={handlePaypal}>Pagar</Button>
             </Wrapper>
             <Modal
                 showModal={showModal}

@@ -43,14 +43,15 @@ const Navbar = ({toggle, loggedUser, handleSignOut, logoutBtnLoading, handleSign
                         <NavLinks to='video-de-evento'>VIDEO DE EVENTO</NavLinks>
                     </NavItem>
                     {isAdmin ? <NavItem to="/admin">
-                        <NavAdminLink to='/admin'>ADMIN PANEL</NavAdminLink>
+                        <NavAdminLink to='/admin'>TABLERO
+                        </NavAdminLink>
                     </NavItem> : <></>}
                 </NavMenu>
 
                 {loggedUser ?
                     <NavBtn>
                         <NavBtnLink to="#" onClick={handleSignOut}>{logoutBtnLoading ?
-                            <CircularProgress/> : `Sign out ${loggedUser?.name}`}</NavBtnLink>
+                            <CircularProgress/> : `Desconectar ${loggedUser?.name}`}</NavBtnLink>
                     </NavBtn> :
                     <FlexRow>
                         <NavBtn>
